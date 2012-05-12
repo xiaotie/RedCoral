@@ -36,7 +36,7 @@ package geb.controls
 	
 	import geb.common.BaseComponent;
 	import geb.common.Style;
-	import geb.containers.Panel;
+	import geb.containers.spareTires.Panel;
 	
 	[Event(name="change", type="flash.events.Event")]
 	public class Text extends BaseComponent

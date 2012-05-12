@@ -4,7 +4,7 @@
     <classEntry path="geb.shapes.Line"/>
     <classEntry path="geb.controls.sliderClasses.Track"/>
     <classEntry path="mxml"/>
-    <classEntry path="geb.controls.Html"/>
+    <classEntry path="geb.controls.spareTires.Html"/>
     <classEntry path="geb.controls.videoClasses.NCManager"/>
     <classEntry path="geb.controls.videoClasses.VideoError"/>
     <classEntry path="geb.containers.DragableCanvas"/>

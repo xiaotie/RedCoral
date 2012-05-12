@@ -26,9 +26,10 @@
  * THE SOFTWARE.
  */
 
-package geb.controls
+package geb.controls.spareTires
 {
 	import flash.display.DisplayObjectContainer;
+	import geb.controls.Slider;
 	
 	public class VScrollBar extends ScrollBar
 	{

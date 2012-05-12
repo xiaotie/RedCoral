@@ -1,4 +1,4 @@
-package geb.controls
+package geb.controls.fl
 {
 	import fl.controls.TextInput;
 

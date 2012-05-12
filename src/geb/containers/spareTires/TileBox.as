@@ -1,4 +1,4 @@
-package geb.containers
+package geb.containers.spareTires
 {
 	import com.yahoo.astra.fl.containers.TilePane;
 

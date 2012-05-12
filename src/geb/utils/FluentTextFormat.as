@@ -1,4 +1,4 @@
-package geb.controls
+package geb.utils
 {
 	import flash.text.TextFormat;
 

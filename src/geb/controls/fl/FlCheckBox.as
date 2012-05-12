@@ -1,8 +1,8 @@
-package geb.controls
+package geb.controls.fl
 {
 	import fl.controls.CheckBox;
 
-	public class CheckBox extends fl.controls.CheckBox
+	public class FlCheckBox extends fl.controls.CheckBox
 	{
 		[Bindable]
 		public override function set selected(val:Boolean):void

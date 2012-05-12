@@ -26,12 +26,13 @@
  * THE SOFTWARE.
  */
 
-package geb.controls
+package geb.controls.spareTires
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
 	
 	import geb.common.BaseComponent;
+	import geb.controls.Label;
 	
 	public class ListItem extends BaseComponent
 	{

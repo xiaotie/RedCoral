@@ -27,7 +27,7 @@
  * 
  */
 
-package geb.controls
+package geb.controls.spareTires
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Shape;
@@ -38,6 +38,7 @@ package geb.controls
 
 	import geb.common.Style;
 	import geb.common.BaseComponent;
+	import geb.controls.Slider;
 	
 	[Event(name="change", type="flash.events.Event")]
 	public class ScrollBar extends BaseComponent

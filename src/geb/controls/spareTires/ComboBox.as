@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package geb.controls
+package geb.controls.spareTires
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;

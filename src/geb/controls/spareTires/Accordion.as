@@ -27,14 +27,14 @@
  */
 
 
-package geb.controls
+package geb.controls.spareTires
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	
 	import geb.common.BaseComponent;
-	import geb.containers.VBox;
-	import geb.containers.Window;
+	import geb.containers.spareTires.VBox;
+	import geb.containers.spareTires.Window;
 	
 	public class Accordion extends BaseComponent
 	{

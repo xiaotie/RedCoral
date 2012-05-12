@@ -1,11 +1,10 @@
-package geb.containers
+package geb.containers.spareTires
 {
-	import com.yahoo.astra.fl.containers.BoxPane;
-	
+	import com.yahoo.astra.fl.containers.HBoxPane;
 	import flash.display.DisplayObject;
 
 	[DefaultProperty( "children" )]
-	public class Box extends BoxPane
+	public class HBoxPane extends com.yahoo.astra.fl.containers.HBoxPane
 	{
 		private var _children:Vector.<DisplayObject>;
 		
@@ -13,7 +12,7 @@ package geb.containers
 		{ 
 			return _children; 
 		} 
-		
+
 		public function set children( value:Vector.<DisplayObject> ):void 
 		{ 
 			if ( _children != value ) 

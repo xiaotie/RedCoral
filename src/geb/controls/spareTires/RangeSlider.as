@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package geb.controls
+package geb.controls.spareTires
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
@@ -36,6 +36,7 @@ package geb.controls
 	
 	import geb.common.BaseComponent;
 	import geb.common.Style;
+	import geb.controls.Label;
 	
 	[Event(name="change", type="flash.events.Event")]
 	public class RangeSlider extends BaseComponent

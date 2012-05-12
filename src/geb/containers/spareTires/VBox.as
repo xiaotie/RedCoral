@@ -27,25 +27,24 @@
  */
  
  
-package geb.containers
+package geb.containers.spareTires
 {
-	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
-	import flash.events.Event;
-	
-	import geb.common.BaseComponent;
+    import flash.display.DisplayObject;
+    import flash.display.DisplayObjectContainer;
+    import flash.events.Event;
+    
+    import geb.common.BaseComponent;
 
 	[Event(name="resize", type="flash.events.Event")]
-	public class HBox extends BaseComponent
+	public class VBox extends BaseComponent
 	{
 		protected var _spacing:Number = 5;
 		private var _alignment:String = NONE;
 		
-		public static const TOP:String = "top";
-		public static const BOTTOM:String = "bottom";
-		public static const MIDDLE:String = "middle";
+		public static const LEFT:String = "left";
+		public static const RIGHT:String = "right";
+		public static const CENTER:String = "center";
 		public static const NONE:String = "none";
-		
 		
 		/**
 		 * Constructor
@@ -53,44 +52,44 @@ package geb.containers
 		 * @param xpos The x position to place this component.
 		 * @param ypos The y position to place this component.
 		 */
-		public function HBox(parent:DisplayObjectContainer = null, xpos:Number = 0, ypos:Number =  0)
+		public function VBox(parent:DisplayObjectContainer = null, xpos:Number = 0, ypos:Number =  0)
 		{
 			super(parent, xpos, ypos);
 		}
 		
-        /**
-         * Override of addChild to force layout;
-         */
-        override public function addChild(child:DisplayObject) : DisplayObject
-        {
-            super.addChild(child);
-            child.addEventListener(Event.RESIZE, onResize);
-            draw();
-            return child;
-        }
+		/**
+		 * Override of addChild to force layout;
+		 */
+		override public function addChild(child:DisplayObject) : DisplayObject
+		{
+			super.addChild(child);
+			child.addEventListener(Event.RESIZE, onResize);
+			draw();
+			return child;
+		}
 
-        /**
-         * Override of addChildAt to force layout;
-         */
-        override public function addChildAt(child:DisplayObject, index:int) : DisplayObject
-        {
-            super.addChildAt(child, index);
-            child.addEventListener(Event.RESIZE, onResize);
-            draw();
-            return child;
-        }
+		/**
+		 * Override of addChildAt to force layout;
+		 */
+		override public function addChildAt(child:DisplayObject, index:int) : DisplayObject
+		{
+			super.addChildAt(child, index);
+			child.addEventListener(Event.RESIZE, onResize);
+			draw();
+			return child;
+		}
 
         /**
          * Override of removeChild to force layout;
          */
         override public function removeChild(child:DisplayObject):DisplayObject
         {
-            super.removeChild(child);
+            super.removeChild(child);            
             child.removeEventListener(Event.RESIZE, onResize);
             draw();
             return child;
         }
-
+		
         /**
          * Override of removeChild to force layout;
          */
@@ -102,11 +101,17 @@ package geb.containers
             return child;
         }
 
+		/**
+		 * Internal handler for resize event of any attached component. Will redo the layout based on new size.
+		 */
 		protected function onResize(event:Event):void
 		{
 			invalidate();
 		}
 		
+		/**
+		 * Sets element's x positions based on alignment value.
+		 */
 		protected function doAlignment():void
 		{
 			if(_alignment != NONE)
@@ -114,17 +119,17 @@ package geb.containers
 				for(var i:int = 0; i < numChildren; i++)
 				{
 					var child:DisplayObject = getChildAt(i);
-					if(_alignment == TOP)
+					if(_alignment == LEFT)
 					{
-						child.y = 0;
+						child.x = 0;
 					}
-					else if(_alignment == BOTTOM)
+					else if(_alignment == RIGHT)
 					{
-						child.y = _height - child.height;
+						child.x = _width - child.width;
 					}
-					else if(_alignment == MIDDLE)
+					else if(_alignment == CENTER)
 					{
-						child.y = (_height - child.height) / 2;
+						child.x = (_width - child.width) / 2;
 					}
 				}
 			}
@@ -137,19 +142,19 @@ package geb.containers
 		{
 			_width = 0;
 			_height = 0;
-			var xpos:Number = 0;
+			var ypos:Number = 0;
 			for(var i:int = 0; i < numChildren; i++)
 			{
 				var child:DisplayObject = getChildAt(i);
-				child.x = xpos;
-				xpos += child.width;
-				xpos += _spacing;
-				_width += child.width;
-				_height = Math.max(_height, child.height);
+				child.y = ypos;
+				ypos += child.height;
+				ypos += _spacing;
+				_height += child.height;
+				_width = Math.max(_width, child.width);
 			}
+			
 			doAlignment();
-			_width += _spacing * (numChildren - 1);
-			dispatchEvent(new Event(Event.RESIZE));
+			_height += _spacing * (numChildren - 1);
 		}
 		
 		/**
@@ -166,7 +171,7 @@ package geb.containers
 		}
 
 		/**
-		 * Gets / sets the vertical alignment of components in the box.
+		 * Gets / sets the horizontal alignment of components in the box.
 		 */
 		public function set alignment(value:String):void
 		{
@@ -177,5 +182,6 @@ package geb.containers
 		{
 			return _alignment;
 		}
+
 	}
 }

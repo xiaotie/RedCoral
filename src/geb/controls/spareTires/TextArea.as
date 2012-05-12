@@ -26,11 +26,12 @@
  * THE SOFTWARE.
  */
 
-package geb.controls
+package geb.controls.spareTires
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import geb.controls.Text;
 	
 	public class TextArea extends Text
 	{

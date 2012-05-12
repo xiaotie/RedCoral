@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package geb.containers
+package geb.containers.spareTires
 {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;

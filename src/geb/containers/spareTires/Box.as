@@ -1,17 +1,18 @@
-package geb.containers
+package geb.containers.spareTires
 {
-	import com.yahoo.astra.fl.containers.VBoxPane;
+	import com.yahoo.astra.fl.containers.BoxPane;
+	
 	import flash.display.DisplayObject;
 
 	[DefaultProperty( "children" )]
-	public class VBoxPane extends com.yahoo.astra.fl.containers.VBoxPane
+	public class Box extends BoxPane
 	{
 		private var _children:Vector.<DisplayObject>;
 		
 		public function get children():Vector.<DisplayObject> 
-		{
+		{ 
 			return _children; 
-		}
+		} 
 		
 		public function set children( value:Vector.<DisplayObject> ):void 
 		{ 

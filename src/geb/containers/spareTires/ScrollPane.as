@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package geb.containers
+package geb.containers.spareTires
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Shape;
@@ -35,8 +35,8 @@ package geb.containers
 	import flash.geom.Rectangle;
 	
 	import geb.common.Style;
-	import geb.controls.HScrollBar;
-	import geb.controls.VScrollBar;
+	import geb.controls.spareTires.HScrollBar;
+	import geb.controls.spareTires.VScrollBar;
 	
 	[DefaultProperty( "children" )]
 	public class ScrollPane extends Panel

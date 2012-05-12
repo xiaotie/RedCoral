@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package geb.containers
+package geb.containers.spareTires
 {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -36,9 +36,9 @@ package geb.containers
 	import flash.events.MouseEvent;
 	
 	import geb.common.BaseComponent;
-	import geb.containers.Panel;
+	import geb.containers.spareTires.Panel;
 	import geb.controls.Label;
-	import geb.controls.PushButton;
+	import geb.controls.spareTires.PushButton;
 	
 	[Event(name="select", type="flash.events.Event")]
 	[Event(name="close", type="flash.events.Event")]

@@ -31,14 +31,15 @@
  * This is a free font obtained from http://www.dafont.com/pf-ronda-seven.font
  */
 
-package geb.controls
+package geb.controls.spareTires
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import geb.containers.Panel;
+	import geb.containers.spareTires.Panel;
+	import geb.controls.Label;
 	
 	[Event(name="select", type="flash.events.Event")]
 	public class Calendar extends Panel
