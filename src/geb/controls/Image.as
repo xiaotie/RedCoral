@@ -19,6 +19,34 @@ package geb.controls
 	{
 		public static const MODE_9GRID:String = "9grid";
 		
+		private var _horizontalAlign:String = "center";
+
+		[Inspectable(defaultValue = "center", enumeration = "left,center,right", category = "String")]
+		public function get horizontalAlign():String
+		{
+			return _horizontalAlign;
+		}
+
+		public function set horizontalAlign(value:String):void
+		{
+			_horizontalAlign = value;
+		}
+
+		
+		private var _verticalAlign:String = "middle";
+
+		[Inspectable(defaultValue = "middle", enumeration = "top,middle,bottom", category = "String")]
+		public function get verticalAlign():String
+		{
+			return _verticalAlign;
+		}
+
+		public function set verticalAlign(value:String):void
+		{
+			_verticalAlign = value;
+		}
+
+		
 		private var _source:*;
 
 		public function get source():*
@@ -116,8 +144,34 @@ package geb.controls
 				var xx:Number = this.width / child.width;
 				var yy:Number = this.height / child.height;
 				var scale:Number = Math.min(xx,yy);
-				child.x = 0.5*(width - child.width * scale);
-				child.y = 0.5*(height - child.height * scale);
+				switch(horizontalAlign)
+				{
+					case "left":
+						child.x = 0;
+						break;
+					case "right":
+						child.x = (width - child.width * scale);
+						break;
+					case "center":
+					default:
+						child.x = 0.5*(width - child.width * scale);
+						break;
+				}
+				
+				switch(verticalAlign)
+				{
+					case "top":
+						child.y = 0;
+						break;
+					case "bottom":
+						child.y = height - child.height * scale;
+						break;
+					case "middle":
+					default:
+						child.y = 0.5*(height - child.height * scale);
+						break;
+				}
+					
 				child.scaleX = scale;
 				child.scaleY = scale;
 			}
