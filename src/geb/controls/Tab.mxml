@@ -1,0 +1,51 @@
+<containers:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:common="geb.common.*"
+				   xmlns:controls="controls.*"
+				   xmlns:controls1="geb.controls.*"
+				   xmlns:containers="geb.containers.*"
+				   width="120" height="24"
+				   bgColor="{selected?selectedColor:isMouseOver?mouseOverColor:unselectedColor}"
+				   bgCorners="{[6,6,0,0]}"
+				   buttonMode="true" useHandCursor="true"
+				   mouseOver="{isMouseOver = true}"
+				   mouseOut="{isMouseOver = false}"
+				   >
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			public var label:String = "";
+			
+			[Bindable]
+			public var selectedColor:uint = 0xfbcf5d;
+			
+			[Bindable]
+			public var mouseOverColor:uint = 0xfbcf5d;
+			
+			[Bindable]
+			public var unselectedColor:uint = 0xcccccc;
+			
+			[Bindable]
+			public var selected:Boolean = false;
+			
+			[Bindable]
+			public var isMouseOver:Boolean = false;
+			
+			[Bindable]
+			public var labelStyle:Object = { };
+			
+			private function getStyleValue(style:Object, name:String, defaultValue:Object):Object
+			{
+				if(style == null || style.hasOwnProperty(name) == false) return defaultValue;
+				else return style.name;
+			}
+		]]>
+	</fx:Script>
+	<controls1:Label text="{label}" width="{width}" height="20" y="3"
+			  mouseEnabled="false" 
+			  fontColor="{uint(getStyleValue(labelStyle,'fontColor',0x000000))}"
+			  fontSize="{Number(getStyleValue(labelStyle,'fontSize',12))}"
+			  align="{String(getStyleValue(labelStyle,'align','center'))}"
+			  bold="{Boolean(getStyleValue(labelStyle,'bold',true))}" 
+			  />
+</containers:Canvas>

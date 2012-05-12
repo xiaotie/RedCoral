@@ -1,0 +1,35 @@
+<containers:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:common="geb.common.*"
+				   xmlns:controls="controls.*"
+				   xmlns:controls1="geb.controls.*"
+				   xmlns:containers="geb.containers.*"
+				   width="120" height="24"
+				   bgColor="{isMouseOver?mouseOverColor:defaultColor}"
+				   bgCorner="6"
+				   buttonMode="true" useHandCursor="true"
+				   mouseOver="{isMouseOver = true}"
+				   mouseOut="{isMouseOver = false}"
+				   >
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			public var label:String = "";
+			
+			[Bindable]
+			public var labelHeight:Number = 20;
+			
+			[Bindable]
+			public var defaultColor:uint = 0xCCCCCC;
+			
+			[Bindable]
+			public var mouseOverColor:uint = 0xDDDDDD;
+			
+			[Bindable]
+			public var isMouseOver:Boolean = false;
+		]]>
+	</fx:Script>
+	<controls1:Label id="lbLabel" text="{label}" width="{width}" y="{0.5*(height-labelHeight)}"
+			  mouseEnabled="false" height="{labelHeight}" fontSize="12" align="center"
+			  />
+</containers:Canvas>

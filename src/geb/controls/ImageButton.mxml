@@ -1,0 +1,29 @@
+<common:BaseContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:controls="geb.controls.*"
+					  xmlns:common="geb.common.*"
+					  buttonMode="true" useHandCursor="true"
+					  mouseChildren="{enable}" mouseEnabled="{enable}"
+					  mouseOver="{if(enable == true) alpha=0.6;}"
+					  mouseOut="{if(enable == true) alpha=1;}" 
+					  >
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			public var source:*;
+			
+			public function get enable():Boolean
+			{
+				return img ? img.enabled : true;
+			}
+			
+			[Bindable]
+			public function set enable(value:Boolean):void
+			{
+				img.enabled = value;
+				if(value == true) alpha = 1;
+			}
+		]]>
+	</fx:Script>
+	<controls:Image id="img" source="{source}" mouseChildren="false" mouseEnabled="false" />
+</common:BaseContainer>

@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<containers:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:common="geb.common.*"
+				   xmlns:controls="controls.*"
+				   xmlns:controls1="geb.controls.*"
+				   xmlns:containers="geb.containers.*" 
+				   xmlns:shapes="geb.shapes.*"
+				   bgColor="0xFFFFFF" bgFillAlpha="0"
+				   bgBorderThickness="{borderThickness}"
+				   bgBorderColor="{borderColor}" 
+				   width="400" height="300"
+				   mouseMove="onMouseMove(event)"
+				   mouseOut="onMouseOut(event)"
+				   mouseDown="onMouseDown(event)"
+				   inited="onInited()"
+				   >
+	<fx:Metadata>
+		[Event(name="buttonClick",type="flash.events.Event")]
+		[Event(name="moving",type="flash.events.Event")]
+	</fx:Metadata>
+	<fx:Script>
+		<![CDATA[
+			import geb.events.MoveEvent;
+			import geb.shapes.CircularDescriptor;
+			import geb.shapes.RectangleDescriptor;
+			import geb.utils.CursorHelper;
+			import geb.utils.DragHelper;
+			
+			[Embed(source='assets/cursorMove.png')]
+			public var iconMove:Class;
+			[Embed(source='assets/cursorResizeArrow45.png')]
+			public var iconResize45:Class;
+			[Embed(source='assets/cursorResizeArrow135.png')]
+			public var iconResize135:Class;
+			[Embed(source='assets/cursorResizeRotate.png')]
+			public var iconRotate:Class;
+			
+			[Embed(source='assets/cancel.png')]
+			[Bindable]
+			public var iconButton:Class; 
+			
+			public var attach:DisplayObject;
+			
+			private var dragHelper:DragHelper;
+			
+			public static const TARGET_NONE:String = "none";
+			public static const TARGET_BUTTON:String = "button";
+			public static const TARGET_BODY:String = "body";
+			public static const TARGET_HANDLE:String = "handle";
+			public static const TARGET_LEFTTOP:String = "leftTop";
+			public static const TARGET_RIGHTTOP:String = "rightTop";
+			public static const TARGET_LEFTDOWN:String = "leftDown";
+			public static const TARGET_RIGHTDOWN:String = "rightDown";
+			
+			public var data:Object;
+			
+			/**
+			 * 是否可以旋转
+			 */
+			[Bindable]
+			public var rotatable:Boolean = true;
+			
+			[Bindable]
+			public var borderThickness:Number = 2;
+			
+			[Bindable]
+			public var borderColor:uint = 0x408ed8;
+
+			[Bindable]
+			public var controlPointWidth:Number = 6;
+			
+			[Bindable]
+			public var handleLength:Number = 20;
+			
+			[Bindable]
+			public var showHandle:Boolean = true;
+			
+			[Bindable]
+			public var showControlPoints:Boolean = true;
+			
+			[Bindable]
+			public var controlPointResponseExtend:Number = 3;
+			
+			public var boundary:DisplayObject;
+			
+			public var boundaryPadding:uint = 5;
+			
+			private var lastMouseClickTarget:Object;
+			private var lastStageMousePoint:Point
+			
+			private function onInited():void
+			{
+				dragHelper = new DragHelper();
+				dragHelper.bind(this);
+				dragHelper.addEventListener(MoveEvent.MOVING, onMoving);
+				dragHelper.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				if(attach != null)
+				{
+					cvsAttach.addChild(attach);
+				}
+			}
+			
+			public function get isDragMode():Boolean
+			{
+				var target:String = targetType;
+				switch(target)
+				{
+					case TARGET_BODY:
+					case TARGET_LEFTTOP:
+					case TARGET_LEFTDOWN:
+					case TARGET_RIGHTTOP:
+					case TARGET_RIGHTDOWN:
+					case TARGET_HANDLE:
+						return true;
+						break;
+					default:
+						return false;
+						break;
+				}
+			}
+			
+			private function onMoving(event:MoveEvent):void
+			{
+				var target:String = targetType;
+				if(this.rotatable == true)	// 旋转模式
+				{
+					switch(target)
+					{
+						case TARGET_BODY:
+							this.x += event.xOffSet;
+							this.y += event.yOffSet;
+							this.dispatchEvent(event.clone());
+							break;
+						case TARGET_LEFTTOP:
+							resizeGrid(-event.xOffSet, -event.yOffSet);
+							break;
+						case TARGET_LEFTDOWN:
+							resizeGrid(-event.xOffSet, event.yOffSet);
+							break;
+						case TARGET_RIGHTTOP:
+							resizeGrid(event.xOffSet, -event.yOffSet);
+							break;
+						case TARGET_RIGHTDOWN:
+							resizeGrid(event.xOffSet, event.yOffSet);
+							break;
+						case TARGET_HANDLE:
+							rotateGrid(event.xOffSet, event.yOffSet);
+							break;
+					}
+				}
+				else  // 非旋转模式
+				{
+					var plt:Point = new Point(x,y);
+					var pld:Point = new Point(x,y + height);
+					var prt:Point = new Point(x + width, y);
+					var prd:Point = new Point(x + width, y + height);
+					
+					switch(target)
+					{
+						case TARGET_BODY:
+							moveByEvent(event);
+							break;
+						case TARGET_LEFTTOP:
+							movePoint(plt,event);
+							resize(plt,prd);
+							break;
+						case TARGET_LEFTDOWN:
+							movePoint(pld,event);
+							resize(pld,prt);
+							break;
+						case TARGET_RIGHTTOP:
+							movePoint(prt,event);
+							resize(pld,prt);
+							break;
+						case TARGET_RIGHTDOWN:
+							movePoint(prd,event);
+							resize(plt,prd);
+							break;
+					}					
+				}
+				this.dispatchEvent(event.clone());
+			}
+			
+			private function moveByEvent(event:MoveEvent):void
+			{
+				var p0:Point = new Point(x+event.xOffSet,y+event.yOffSet);
+				var p1:Point = new Point(x+event.xOffSet + width, y + height+event.yOffSet);
+				var xx:Number = event.xOffSet;
+				var yy:Number = event.yOffSet;
+				if(boundary != null)
+				{
+					if(xx < 0) // 左移
+					{
+						if(p0.x < boundary.x + boundaryPadding)
+						{
+							xx = 0;
+						}
+					}
+					else 
+					{
+						if(p1.x >= boundary.x + boundary.width - boundaryPadding) // 右移动
+						{
+							xx = 0;
+						}
+					}
+					
+					if(yy < 0)
+					{
+						if(p0.y < boundary.y + boundaryPadding)
+						{
+							yy = 0;
+						}
+					}
+					else
+					{
+						if(p1.y >= boundary.y + boundary.height - boundaryPadding)
+						{
+							yy = 0;
+						}
+					}
+				}
+				
+				this.x += xx;
+				this.y += yy;
+				this.dispatchEvent(event.clone());
+			}
+			
+			private function movePoint(p:Point, e:MoveEvent):void
+			{
+				p.x += e.xOffSet;
+				p.y += e.yOffSet;
+			}
+			
+			private function onMouseUp(event:MouseEvent):void
+			{
+				lastMouseClickTarget = null;
+				if(CursorHelper.bitmap is iconMove
+					|| CursorHelper.bitmap is iconResize45
+					|| CursorHelper.bitmap is iconResize135
+					|| CursorHelper.bitmap is iconRotate)
+				{
+					CursorHelper.removeCustomCursor();
+				}
+			}
+			
+			private function resizeGrid(xOffset:Number, yOffset:Number):void
+			{
+				var center:Point = this.localToGlobal(new Point(this.width * 0.5, this.height * 0.5));
+				var p:Point = this.localToGlobal(new Point(this.mouseX, this.mouseY));
+				p.x = p.x - center.x;
+				p.y = p.y - center.y;
+				
+				var r:Number = 0.5* Math.sqrt(this.width * this.width + this.height * this.height);
+				var rr:Number = Math.sqrt(p.x * p.x + p.y * p.y);
+				var s:Number = (rr - r) / r;
+				var ss:Number = rr / r;
+				gridScaleX = ss * gridScaleX;
+				gridScaleY = ss * gridScaleY;
+				var c0:Point = this.localToGlobal(new Point(width*0.5,height*0.5));
+				this.width = ss * this.width;
+				this.height = ss * this.height;
+				var c1:Point = this.localToGlobal(new Point(width*0.5,height*0.5));
+				this.x += c0.x - c1.x;
+				this.y += c0.y - c1.y;
+			}
+			
+			private function checkBoundary(p:Point):Boolean
+			{
+				return p.x >= (boundary.x + boundaryPadding) && p.y >= (boundary.y + boundaryPadding)
+					&& p.x < (boundary.x + boundary.width - boundaryPadding) 
+					&& p.y < (boundary.y + boundary.height - boundaryPadding);
+			}
+			
+			private function resize(p0:Point, p1:Point):void
+			{
+				if(boundary != null)
+				{
+					if(checkBoundary(p0) != true || checkBoundary(p1) != true)
+					{
+						return;
+					}
+				}
+				
+				var xMin:Number = Math.min(p0.x,p1.x);
+				var yMin:Number = Math.min(p0.y,p1.y);
+				var xMax:Number = Math.max(p0.x,p1.x);
+				var yMax:Number = Math.max(p0.y,p1.y);
+				this.x = xMin;
+				this.y = yMin;
+				this.width = xMax - xMin;
+				this.height = yMax - yMin;
+			}
+			
+			private function rotateGrid(xOffset:Number, yOffset:Number):void
+			{
+				var center:Point = this.localToGlobal(new Point(this.width * 0.5, this.height * 0.5));
+				var p:Point = this.localToGlobal(new Point(this.mouseX, this.mouseY));
+				p.x = p.x - center.x;
+				p.y = p.y - center.y;
+				var angle:Number = Math.atan2(p.x,-p.y) * 180 / Math.PI;
+
+				var c0:Point = this.localToGlobal(new Point(width*0.5,height*0.5));
+				this.rotation = angle;
+				var c1:Point = this.localToGlobal(new Point(width*0.5,height*0.5));
+				this.x += c0.x - c1.x;
+				this.y += c0.y - c1.y;
+				this.dispatchEvent(new Event(Event.RESIZE));
+			}
+			
+			public var gridScaleX:Number = 1;
+			public var gridScaleY:Number = 1;
+			
+			public function get targetType():String
+			{
+				return getTargetType(lastMouseClickTarget);
+			}
+			
+			private function getTargetType(target:Object):String
+			{
+				if(target == null)
+				{
+					return TARGET_NONE;
+				}
+				else if(target == this.mpHandle)
+				{
+					return TARGET_HANDLE;
+				}
+				else if(target == this.mpLeftTop)
+				{
+					return TARGET_LEFTTOP;
+				}
+				else if(target == this.mpLeftDown)
+				{
+					return TARGET_LEFTDOWN;
+				}
+				else if(target == this.mpRightTop)
+				{
+					return TARGET_RIGHTTOP;
+				}
+				else if(target == this.mpRightDown)
+				{
+					return TARGET_RIGHTDOWN;
+				}
+				else if(this.btn.contains(target as DisplayObject))
+				{
+					return TARGET_BUTTON;
+				}
+				else if(target == this.background)
+				{
+					return TARGET_BODY;
+				}
+				else
+				{
+					return TARGET_NONE;
+				}
+			}
+			
+			private function onMouseMove(event:MouseEvent):void
+			{
+				var type:String = this.targetType;
+				if(type == TARGET_NONE)
+				{
+					type = this.getTargetType(event.target);
+				}
+				
+				switch(type)
+				{
+					case TARGET_BODY:
+						useIconMove();
+						break;
+					case TARGET_LEFTTOP:
+						useIconResize135();
+						break;
+					case TARGET_LEFTDOWN:
+						useIconResize45();
+						break;
+					case TARGET_RIGHTTOP:
+						useIconResize45();
+						break;
+					case TARGET_RIGHTDOWN:
+						useIconResize135();
+						break;
+					case TARGET_HANDLE:
+						useIconRotate();
+						break;
+					case TARGET_NONE:
+					case TARGET_BUTTON:
+					default:
+						CursorHelper.removeCustomCursor();
+						break;
+					
+				}
+			}
+			
+			private function useIconResize45():void
+			{
+				if(CursorHelper.bitmap != null && CursorHelper.bitmap is iconResize45)
+				{
+					return;
+				}
+				
+				CursorHelper.useCustomCursor(new iconResize45() as Bitmap, true);
+			}
+			
+			private function useIconResize135():void
+			{
+				if(CursorHelper.bitmap != null && CursorHelper.bitmap is iconResize135)
+				{
+					return;
+				}
+				
+				CursorHelper.useCustomCursor(new iconResize135() as Bitmap, true);
+			}
+			
+			private function useIconMove():void
+			{
+				if(CursorHelper.bitmap != null && CursorHelper.bitmap is iconMove)
+				{
+					return;
+				}
+				
+				CursorHelper.useCustomCursor(new iconMove() as Bitmap, true);
+			}
+			
+			private function useIconRotate():void
+			{
+				if(CursorHelper.bitmap != null && CursorHelper.bitmap is iconRotate)
+				{
+					return;
+				}
+				
+				CursorHelper.useCustomCursor(new iconRotate() as Bitmap, true);
+			}
+
+			private function onMouseOut(event:MouseEvent):void
+			{
+				if(this.lastMouseClickTarget == null)
+				{
+					CursorHelper.removeCustomCursor();
+				}
+			}
+			
+			private function onMouseDown(event:MouseEvent):void
+			{
+				lastMouseClickTarget = event.target;
+				lastStageMousePoint = new Point(event.stageX,event.stageY);
+			}
+			
+			private function onClick():void
+			{
+				this.dispatchEvent(new Event("buttonClick"));
+			}
+			
+			private function and(val0:Boolean, val1:Boolean):Boolean
+			{
+				return val0 && val1;
+			}
+			
+		]]>
+	</fx:Script>
+
+	
+	<!-- 控制柄 -->
+	<shapes:Rectangle color="{borderColor}" 
+					  height="{handleLength}" width="{borderThickness}" 
+					  x="{0.5*width-borderThickness*0.5}" y="{-handleLength}"
+					  visible="{and(rotatable,showHandle)}" />
+	<!-- 控制柄上的控制点  -->
+	<shapes:Rectangle id="cpHandle" color="{bgBorderColor}"
+					  descriptor="{new RectangleDescriptor(0.5*width,-handleLength,controlPointWidth)}"
+					  visible="{and(rotatable,showHandle)}" />
+	<!-- 控制柄上的鼠标响应点  -->
+	<shapes:Ellipse id="mpHandle" color="0xFF0000" alpha="0"
+					descriptor="{new CircularDescriptor(0.5*width,-handleLength,controlPointWidth + controlPointResponseExtend)}"
+					visible="{and(rotatable,showHandle)}" />
+	<!-- 左上控制点 -->
+	<shapes:Rectangle id="cpLeftTop" color="{bgBorderColor}"
+					  descriptor="{new RectangleDescriptor(0,0,controlPointWidth)}"
+					  visible="{showControlPoints}" />
+	<!-- 左上鼠标响应点  -->
+	<shapes:Ellipse id="mpLeftTop" color="0xFF0000" alpha="0" 
+					descriptor="{new CircularDescriptor(0,0,controlPointWidth + controlPointResponseExtend)}"
+					visible="{showHandle}" />
+	<!-- 右上控制点 -->
+	<shapes:Rectangle id="cpRightTop" color="{bgBorderColor}"
+					  descriptor="{new RectangleDescriptor(width,0,controlPointWidth)}"
+					  visible="{showControlPoints}" />
+	<!-- 右上鼠标响应点  -->
+	<shapes:Ellipse id="mpRightTop" color="0xFF0000" alpha="0" 
+					descriptor="{new CircularDescriptor(width,0,controlPointWidth + controlPointResponseExtend)}"
+					visible="{showHandle}" />
+	<!-- 左下控制点 -->
+	<shapes:Rectangle id="cpLeftDown" color="{bgBorderColor}"
+					  descriptor="{new RectangleDescriptor(0,height,controlPointWidth)}"
+					  visible="{showControlPoints}" />
+	<!-- 左下鼠标响应点  -->
+	<shapes:Ellipse id="mpLeftDown" color="0xFF0000" alpha="0" 
+					descriptor="{new CircularDescriptor(0,height,controlPointWidth + controlPointResponseExtend)}"
+					visible="{showHandle}" />
+	<!-- 右下控制点 -->
+	<shapes:Rectangle id="cpRightDown" color="{bgBorderColor}"
+					  descriptor="{new RectangleDescriptor(width,height,controlPointWidth)}"
+					  visible="{showControlPoints}" />
+	<!-- 右下鼠标响应点  -->
+	<shapes:Ellipse id="mpRightDown" color="0xFF0000" alpha="0" 
+					descriptor="{new CircularDescriptor(width,height,controlPointWidth + controlPointResponseExtend)}"
+					visible="{showHandle}" />
+	<common:BaseContainer id="cvsAttach" x="0"
+						  y="{height+bgBorderThickness*0.5}">
+		<controls1:Image id="btn" buttonMode="true" useHandCursor="true"
+				  x="0"
+				  y="0"
+				  source="{iconButton}"  click="onClick()" />		
+	</common:BaseContainer>
+</containers:Canvas>

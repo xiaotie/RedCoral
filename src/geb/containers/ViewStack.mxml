@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<common:BaseContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:common="geb.common.*"
+					  width="400" height="300" inited="onInited()"
+					  >
+	<fx:Script>
+		<![CDATA[
+			private var _selectedIndex:int = -1;
+
+			public function get selectedIndex():int
+			{
+				return _selectedIndex;
+			}
+
+			[Bindable]
+			public function set selectedIndex(value:int):void
+			{
+				if(this.children == null)
+				{
+					_selectedIndex = value;
+					return;
+				};
+				setSelectedIndexCore(value);
+			}
+			
+			private function setSelectedIndexCore(value:int):void
+			{
+				var length:int = this.children.length;
+				if(length == 0) return;
+				
+				for(var i:int = 0; i < length; i++)
+				{
+					var obj:DisplayObject = this.children[i];
+					if(obj!= null)
+					{
+						if(value == i)
+						{
+							_selectedIndex = value;
+							obj.visible = true;
+						}
+						else
+						{
+							obj.visible = false;
+						}
+					}
+				}
+			}
+			
+			private var _selectedObject:DisplayObject;
+
+			public function get selectedObject():DisplayObject
+			{
+				return _selectedObject;
+			}
+
+			[Bindable]
+			public function set selectedObject(value:DisplayObject):void
+			{
+				if(this.children == null)
+				{
+					_selectedObject = value;
+					return;
+				};
+				setSelectedObjectCore(value);
+			}
+			
+			private function setSelectedObjectCore(value:DisplayObject):void
+			{
+				var length:int = this.children.length;
+				if(length == 0) return;
+				
+				for(var i:int = 0; i < length; i++)
+				{
+					var obj:DisplayObject = this.children[i];
+					if(obj!= null)
+					{
+						if(obj == value)
+						{
+							_selectedObject = value;
+							obj.visible = true;
+						}
+						else
+						{
+							obj.visible = false;
+						}
+					}
+				}
+			}
+			
+			private function onInited():void
+			{
+				if(this.children.length > 0)
+				{
+					if(this.selectedIndex < 0) this.selectedIndex = 0;
+				}
+			}
+			
+			override protected function onInvalidate(event:Event) : void
+			{
+				super.onInvalidate(event);
+				if(_selectedObject != null)
+				{
+					setSelectedObjectCore(_selectedObject);
+				}
+				else
+				{
+					setSelectedIndexCore(Math.max(0,_selectedIndex));
+				}
+			}
+		]]>
+	</fx:Script>
+</common:BaseContainer>

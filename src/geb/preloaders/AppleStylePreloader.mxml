@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<common:BaseContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:common="geb.common.*"
+					  width="0" height="0" 
+					  xmlns:controls="geb.controls.*"
+					  xmlns:shapes="geb.shapes.*" inited="onInited()"
+					  >
+	<fx:Script>
+		<![CDATA[
+			private var timer:Timer;
+			private var slices:int = 12;
+			public var radius:int = 11;
+			public var timerDelay:int = 100;
+			public var sliceColor:uint = 0x333333;
+			
+			private function onInited():void
+			{
+				var i:int = slices;
+				var degrees:int = 360 / slices;
+				while (i--)
+				{
+					var slice:Shape = getSlice();
+					slice.alpha = Math.max(0.2, 1 - (0.1 * i));
+					var radianAngle:Number = (degrees * i) * Math.PI / 180;
+					slice.rotation = -degrees * i;
+					slice.x = Math.sin(radianAngle) * radius;
+					slice.y = Math.cos(radianAngle) * radius;
+					box.addChild(slice);
+				}
+				timer = new Timer(timerDelay);
+				start();
+			}
+			
+			public function start():void
+			{
+				stop();
+				timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
+				timer.start();
+			}
+			
+			private function getSlice():Shape
+			{
+				var slice:Shape = new Shape();
+				slice.graphics.beginFill(sliceColor);
+				slice.graphics.drawRoundRect(-1, 0, 4, 14, 4, 4);
+				slice.graphics.endFill();
+				return slice;
+			}
+			
+			private function onTimer(event:TimerEvent):void
+			{
+				if(box != null)
+					box.rotation = (box.rotation + (360 / slices)) % 360;
+			}
+			
+			public function stop():void
+			{
+				if(timer != null)
+				{
+					timer.removeEventListener(TimerEvent.TIMER, onTimer);
+					timer.stop();
+				}
+			}
+			
+			public override function close():void
+			{
+				stop();
+				super.close();
+			}
+		]]>
+	</fx:Script>
+	<common:BaseContainer id="box" x="{width * 0.5}" y="{height*0.5}" />
+</common:BaseContainer>

@@ -1,0 +1,39 @@
+<containers:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:common="geb.common.*"
+				   xmlns:controls="controls.*"
+				   xmlns:controls1="geb.controls.*"
+				   xmlns:containers="geb.containers.*"
+				   width="100" height="100"
+				   bgColor="0xFFFFFF"
+				   buttonMode="true" useHandCursor="true"
+				   >
+	<fx:Script>
+		<![CDATA[
+			public static function show(img:*, isDialog:Boolean = true):void
+			{
+				var v:ImageViewer = new ImageViewer();
+				v.source = img;
+				if(isDialog == false)
+				{
+					v.show();
+				}
+				else
+				{
+					v.showDialog();
+				}
+			}
+			
+			[Bindable]
+			public var source:*;
+			
+			private function onLoadComplete():void
+			{
+				this.width = img.width + 100;
+				this.height = img.height + 100;
+			}
+		]]>
+	</fx:Script>
+	<controls1:Image id="img" x="50" y="50" source="{source}" complete="onLoadComplete()" />
+	<controls1:ImageButton id="btnClose" source="@Embed(source='assets/cancel.png')" x="{width-8}" y="-8" click="close()" />	
+</containers:Canvas>

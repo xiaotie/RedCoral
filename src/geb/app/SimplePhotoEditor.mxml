@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<containers:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:common="geb.common.*"
+				   xmlns:controls="controls.*"
+				   xmlns:controls1="geb.controls.*" 
+				   xmlns:containers="geb.containers.*" 
+				   xmlns:shapes="geb.shapes.*" 
+				   width="0" height="0"
+				   bgCorner="3" bgAlpha="0" bgFillAlpha="0"
+				   inited="{loadBitmap(bmp)}"
+				   >
+	<fx:Script>
+		<![CDATA[
+			import flash.filters.BlurFilter;
+			import flash.filters.ConvolutionFilter;
+			import flash.geom.Rectangle;
+			
+			import geb.image.ColorMatrix;
+			import geb.utils.ImageMetricHelper;
+			
+			public var okCallback:Function;
+			
+			private var _bmp:Bitmap;
+
+			public function get bmp():Bitmap
+			{
+				return _bmp;
+			}
+
+			[Bindable]
+			public function set bmp(value:Bitmap):void
+			{
+				_bmp = value;
+				if(value != null)
+				{
+					loadBitmap(value);
+				}
+			}
+			
+			private var _metric:ImageMetricHelper;
+			
+			public function loadBitmap(bmp:Bitmap):void
+			{
+				_metric = new ImageMetricHelper(bmp);
+				
+				var scale:Number =_metric.getMaxFitScale(cvsDemo.width,cvsDemo.height);
+				
+				demo.scaleX = scale;
+				demo.scaleY = scale;
+				demo.width = 0;
+				demo.height = 0;
+				demo.x = - bmp.width * scale * 0.5;
+				demo.y = - bmp.height * scale * 0.5;
+				demo.source = bmp;
+				
+				cvsZeroSize.rotation = 0;
+			}
+			
+			public function rotate(angle:Number):void
+			{
+				cvsZeroSize.rotation += angle;
+				var scale:Number =_metric.getMaxFitScale(cvsDemo.width,cvsDemo.height, cvsZeroSize.rotation);
+				demo.scaleX = scale;
+				demo.scaleY = scale;
+				demo.x = - _metric.width * scale * 0.5;
+				demo.y = - _metric.height * scale * 0.5;
+			}
+			
+			private var _effectSetting:Object = null;
+			
+			public function get effectSetting():Object
+			{
+				return _effectSetting;
+			}
+			
+			[Bindable]
+			public function set effectSetting(value:Object):void
+			{
+				_effectSetting = value;
+				if(value == null)
+				{
+					this.useEffect(NaN,NaN,NaN,NaN,NaN,NaN);
+				}
+				else
+				{
+					var obj:Object = value;
+					this.useEffect(
+						obj.blur,
+						obj.brightnessAdjust,
+						obj.contrastAdjust,
+						obj.sharpAdjust,
+						obj.saturationAdjust,
+						obj.embossing
+					);
+				}
+			}
+			
+			private function useEffect(blur:Number = 0, 				// 柔化
+									   brightnessAdjust:Number = 0,	// 亮度调整，-255 - 255
+									   contrastAdjust:Number = 1,	// 对比度调整，0 - 正无穷
+									   sharpAdjust:Number = 0,		// 锐化
+									   saturationAdjust:Number = 0,	// 饱和度
+									   embossing:Number = 0):void	// 浮雕
+			{
+				var filters:Array = [];
+				
+				
+				if(isNaN(blur) == false && blur > 0)
+				{
+					filters.push(new BlurFilter(blur,blur,1));
+				}
+				
+				if(isNaN(brightnessAdjust) == false && brightnessAdjust != 0)
+				{
+					var cmBright:ColorMatrix = new ColorMatrix();
+					cmBright.adjustBrightness(brightnessAdjust,brightnessAdjust,brightnessAdjust);
+					filters.push(cmBright.filter);
+				}
+				
+				if(isNaN(contrastAdjust) == false && contrastAdjust != 1 && contrastAdjust > 0)
+				{
+					var cmContrast:ColorMatrix = new ColorMatrix();
+					cmContrast.adjustContrast(contrastAdjust,contrastAdjust,contrastAdjust);
+					filters.push(cmContrast.filter);
+				}
+				
+				if(isNaN(sharpAdjust) == false && sharpAdjust > 0)
+				{
+					var cfSharp:ConvolutionFilter = new ConvolutionFilter(
+						3,3,[
+							0,-1,0,
+							-1,5+sharpAdjust,-1,
+							0,-1,0
+						]
+					);
+					for(var i:int = 0; i < sharpAdjust; i++)
+					{
+						filters.push(cfSharp);
+					}
+				}
+				
+				if(isNaN(saturationAdjust) == false && saturationAdjust > 0)
+				{
+					var cmSat:ColorMatrix = new ColorMatrix();
+					cmSat.adjustSaturation(saturationAdjust);
+					filters.push(cmSat.filter);
+				}
+				
+				if(isNaN(embossing) == false && embossing > 0)
+				{
+					var cfEmbossing:ConvolutionFilter = new ConvolutionFilter(
+						3,3,[
+							-2*embossing,-1*embossing,0,
+							-1*embossing,0,1*embossing,
+							0,1*embossing,2*embossing
+						]
+					);
+					filters.push(cfEmbossing);
+				}
+				
+				this.demo.filters = filters;
+			}
+			
+			public function getImage():BitmapData
+			{
+				var bmp:BitmapData = new BitmapData(demo.width, demo.height);
+				bmp.draw(demo);
+				return bmp;
+			}
+			
+			public function cutImage(p0:Point,p1:Point):BitmapData
+			{
+				var d0:Point = this.localToGlobal(p0);
+				var d1:Point = this.localToGlobal(p1);
+				d0 = demo.globalToLocal(d0);
+				d1 = demo.globalToLocal(d1);
+				checkPoint(d0);
+				checkPoint(d1);
+				var w:int = int(Math.round(Math.abs(d0.x - d1.x)));
+				var h:int = int(Math.round(Math.abs(d0.y - d1.y)));
+				if(w < 2 || h < 2) return null;
+				var bmp:BitmapData = new BitmapData(w, h);
+				bmp.draw(demo,new Matrix(1,0,0,1,-d0.x,-d0.y),null,null);
+				return bmp;
+			}
+			
+			private function checkPoint(p:Point):void
+			{
+				p.x = Math.min(p.x, demo.width - 1);
+				p.x = Math.max(p.x, 0);
+				p.y = Math.min(p.y, demo.height - 1);
+				p.y = Math.max(p.y, 0);
+			}
+		]]>
+	</fx:Script>
+	<common:BaseContainer id="cvs" width="{width}" height="{height}" >
+		<!--
+		<shapes:Rectangle id="bgRect" x="5" y="5" width="{width-10}" height="{height-10}"
+						  borderColor="0xaaaaaa" borderThickness="1"
+						  />
+		-->
+		<common:BaseContainer id="cvsDemo" x="6" y="6" width="{width-12}" height="{height-12}">
+			<common:BaseContainer id="cvsZeroSize" x="{0.5*cvsDemo.width}" y="{0.5*cvsDemo.height}" width="0" height="0">
+				<controls1:Image id="demo" />
+			</common:BaseContainer>
+		</common:BaseContainer>
+	</common:BaseContainer>
+</containers:Canvas>

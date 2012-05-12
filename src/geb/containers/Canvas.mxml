@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<common:BaseContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:common="geb.common.*"
+					  width="400" height="300" 
+					  xmlns:controls="geb.controls.*"
+					  xmlns:shapes="geb.shapes.*"
+					  >
+	<fx:Script>
+		<![CDATA[
+			[Bindable] 
+			public var bgColor:uint = 0xFFFFFF;
+			
+			[Bindable]
+			public var bgCorner:Number = NaN;
+			
+			[Bindable]
+			public var bgCorners:Array = null;
+			
+			[Bindable]
+			public var bgAlpha:Number = 1;
+			
+			[Bindable]
+			public var bgEnabled:Boolean = true;
+			
+			[Bindable]
+			public var bgBorderThickness:Number = NaN;
+			
+			[Bindable]
+			public var bgBorderColor:Number = 0xFFFFFF;
+			
+			[Bindable]
+			public var bgFillAlpha:Number = 1;
+			
+			[Bindable]
+			public var bgBorderAlpha:Number = 1;
+		]]>
+	</fx:Script>
+	<shapes:Rectangle id="background" width="{width}" height="{height}"
+					   corner="{bgCorner}" corners="{bgCorners}"
+					   color="{bgColor}"
+					   alpha="{bgEnabled?bgAlpha:bgAlpha*0.3}"
+					   borderColor="{bgBorderColor}"
+					   borderThickness="{bgBorderThickness}"
+					   fillAlpha="{bgFillAlpha}" borderAlpha="{bgBorderAlpha}"
+					   />
+</common:BaseContainer>

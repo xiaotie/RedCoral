@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<containers:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		   xmlns:mx="library://ns.adobe.com/flex/mx"  
+		   xmlns:containers="geb.containers.*"
+		   width="400" height="300" mouseDown="onDrag(event)">
+	<fx:Script>
+		<![CDATA[
+			
+			private var _dragable:Boolean = true;
+
+			public function get dragable():Boolean
+			{
+				return _dragable;
+			}
+
+			public function set dragable(value:Boolean):void
+			{
+				_dragable = value;
+				if(value == false)
+				{
+					if(stage != null)
+					{
+						onDrop(null);
+					}
+				}
+			}
+			
+			public var dragBounds:Rectangle;
+			
+			private function onDrag(e:MouseEvent):void
+			{
+				if(dragable == false) return;
+				
+				stage.addEventListener(MouseEvent.MOUSE_UP, onDrop);
+				startDrag(false,dragBounds);
+			}
+			
+			private function onDrop(e:MouseEvent):void
+			{
+				stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
+				stopDrag();
+			}
+		]]>
+	</fx:Script>
+</containers:Canvas>

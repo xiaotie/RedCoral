@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<containers:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				 xmlns:mx="library://ns.adobe.com/flex/mx" 
+				 xmlns:common="geb.common.*"
+				 xmlns:controls="geb.controls.*"
+				 width="{Application.instance.width}"
+				 height="{Application.instance.height}"
+				 resize="onResize()" bgColor="0x000000" xmlns:containers="geb.containers.*"
+				 >
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			
+			import geb.common.Application;
+			import geb.common.BaseComponent;
+			
+			private var content:BaseComponent;
+			private var contentX:Number = NaN;
+			private var contentY:Number = NaN;
+			
+			public override function show(x:Number = NaN, y:Number = NaN):void
+			{
+				this.background.visible = false;
+				Application.instance.addChild(this);
+			}
+			
+			public override function showDialog(x:Number = NaN, y:Number = NaN):void
+			{
+				this.bgEnabled = false;
+				Application.instance.addChild(this);
+			}
+			
+			public function setContent(obj:BaseComponent,x:Number = NaN, y:Number = NaN):void
+			{
+				if(obj == null) return;
+				contentX = x;
+				contentY = y;
+				content = obj;
+				Application.instance.addChild(obj);
+				moveContent(obj);
+			}
+			
+			private function moveContent(obj:BaseComponent):void
+			{
+				if(obj == null) return;
+				
+				if(isNaN(contentX) == true)
+				{
+					obj.x = 0.5 * (this.width - obj.width);
+				}
+				else
+				{
+					obj.x = contentX;
+				}
+				
+				if(isNaN(contentY) == true)
+				{
+					obj.y = 0.5 * (this.height - obj.height);
+				}
+				else
+				{
+					obj.y = contentY;
+				}
+			}
+			
+			private function onResize():void
+			{
+				moveContent(content);
+			}
+		]]>
+	</fx:Script>
+</containers:Canvas>

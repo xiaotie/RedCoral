@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<containers:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:common="geb.common.*"
+				   xmlns:controls="geb.controls.*"
+				   xmlns:containers="geb.containers.*" 
+				   xmlns:shapes="geb.shapes.*" 
+				   bgBorderThickness="1" bgColor="0xFFFFFF" bgBorderColor="0x333333" 
+				   width="200" height="20" 
+				   >
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			public var percent:Number = 0;
+			
+			[Bindable]
+			public var fillColor:uint = 0x0000FF;
+			
+			private function getWidth(val:Number):Number
+			{
+				var ww:Number = this.width - 2;
+				return ww * val;
+			}
+		]]>
+	</fx:Script>
+	<shapes:Rectangle x="1" y="1" color="{fillColor}" height="{height-2}" width="{getWidth(percent)}" />
+</containers:Canvas>
