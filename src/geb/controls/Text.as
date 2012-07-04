@@ -110,6 +110,8 @@ package geb.controls
 		{
 			super.draw();
 			
+			if(_tf == null) return;
+			
 //			_panel.setSize(_width, _height);
 //			_panel.draw();
 			
@@ -168,6 +170,7 @@ package geb.controls
 			if(_text == null) _text = "";
 			invalidate();
 		}
+		
 		public function get text():String
 		{
 			return _text;

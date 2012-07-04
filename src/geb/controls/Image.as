@@ -21,7 +21,7 @@ package geb.controls
 		
 		private var _horizontalAlign:String = "center";
 
-		[Inspectable(defaultValue = "center", enumeration = "left,center,right", category = "String")]
+		[Inspectable(defaultValue = "center", enumeration = "left,center,right,none", category = "String")]
 		public function get horizontalAlign():String
 		{
 			return _horizontalAlign;
@@ -32,10 +32,9 @@ package geb.controls
 			_horizontalAlign = value;
 		}
 
-		
 		private var _verticalAlign:String = "middle";
 
-		[Inspectable(defaultValue = "middle", enumeration = "top,middle,bottom", category = "String")]
+		[Inspectable(defaultValue = "middle", enumeration = "top,middle,bottom,none", category = "String")]
 		public function get verticalAlign():String
 		{
 			return _verticalAlign;
@@ -146,34 +145,45 @@ package geb.controls
 				var scale:Number = Math.min(xx,yy);
 				switch(horizontalAlign)
 				{
+					case "none":
+						child.x = 0;
+						child.scaleX = xx;
+						break;
 					case "left":
 						child.x = 0;
+						child.scaleX = scale;
 						break;
 					case "right":
 						child.x = (width - child.width * scale);
+						child.scaleX = scale;
 						break;
 					case "center":
 					default:
 						child.x = 0.5*(width - child.width * scale);
+						child.scaleX = scale;
 						break;
 				}
 				
 				switch(verticalAlign)
 				{
+					case "none":
+						child.scaleY = scale;
+						child.scaleY = yy;
+						break;
 					case "top":
 						child.y = 0;
+						child.scaleY = scale;
 						break;
 					case "bottom":
 						child.y = height - child.height * scale;
+						child.scaleY = scale;
 						break;
 					case "middle":
 					default:
 						child.y = 0.5*(height - child.height * scale);
+						child.scaleY = scale;
 						break;
-				}
-					
-				child.scaleX = scale;
-				child.scaleY = scale;
+				}					
 			}
 			else
 			{

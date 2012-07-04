@@ -59,6 +59,19 @@ package geb.controls
 			_fontColor = value;
 			invalidate();
 		}
+		
+		private var _fontFamily:String;
+
+		public function get fontFamily():String
+		{
+			return _fontFamily;
+		}
+
+		public function set fontFamily(value:String):void
+		{
+			_fontFamily = value;
+			invalidate();
+		}
 
 		public var align:String = "left";
 		public var bold:Boolean = false;
@@ -133,6 +146,7 @@ package geb.controls
 			f.bold = this.bold;
 			f.underline = this.underline;
 			f.italic = this.italic;
+			if(fontFamily) f.font = fontFamily;
 			_tf.height = _height;
 			if(htmlText)
 			{

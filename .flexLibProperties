@@ -8,6 +8,9 @@
     <classEntry path="geb.controls.videoClasses.NCManager"/>
     <classEntry path="geb.controls.videoClasses.VideoError"/>
     <classEntry path="geb.containers.DragableCanvas"/>
+    <classEntry path="geb.utils.MD5"/>
+    <classEntry path="geb.utils.IntUtil"/>
+    <classEntry path="geb.preloaders.BusyIndicator"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

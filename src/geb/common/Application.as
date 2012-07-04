@@ -19,7 +19,6 @@ package geb.common
 		protected var _height:Number = 0;
 		
 		public var fillMode:Boolean = true;
-		
 		private var inited:Boolean = false;
 		
 		public static var instance : Application = null;
@@ -74,6 +73,8 @@ package geb.common
 		
 		protected function onInvalidate(event:Event) : void
 		{
+			if(stage == null) return;
+			
 			if(fillMode == true && stage.stageWidth > 0)
 			{
 				if(this.width != stage.stageWidth) this.width = stage.stageWidth;
@@ -113,6 +114,8 @@ package geb.common
 		
 		override public function set width(w:Number):void
 		{
+			if(_width == w) return;
+			
 			_width = w;
 			invalidate();
 			dispatchEvent(new Event(Event.RESIZE));
@@ -125,6 +128,8 @@ package geb.common
 		
 		override public function set height(h:Number):void
 		{
+			if(_height == h) return;
+			
 			_height = h;
 			invalidate();
 			dispatchEvent(new Event(Event.RESIZE));

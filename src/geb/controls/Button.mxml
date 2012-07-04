@@ -27,9 +27,19 @@
 			
 			[Bindable]
 			public var isMouseOver:Boolean = false;
+			
+			[Bindable]
+			public var fontSize:Number = 12;
+			
+			[Bindable]
+			public var fontColor:uint = 0x000000;
+			
+			[Bindable]
+			public var bold:Boolean = false;
 		]]>
 	</fx:Script>
 	<controls1:Label id="lbLabel" text="{label}" width="{width}" y="{0.5*(height-labelHeight)}"
-			  mouseEnabled="false" height="{labelHeight}" fontSize="12" align="center"
+			  mouseEnabled="false" height="{labelHeight}" fontSize="{fontSize}" align="center" 
+			  fontColor="{fontColor}" bold="{bold}"
 			  />
 </containers:Canvas>
