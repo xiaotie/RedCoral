@@ -1,3 +1,7 @@
+/**
+ * @author xiaotie@geblab.com 
+ */
+
 package
 {
 	import flash.display.Stage;

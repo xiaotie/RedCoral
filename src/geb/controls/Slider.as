@@ -39,6 +39,8 @@ package geb.controls
 	import geb.common.BaseComponent;
 	
 	[Event(name="change", type="flash.events.Event")]
+	[Event(name="backClick", type="flash.events.Event")]
+	[Event(name="drop", type="flash.events.Event")]
 	public class Slider extends BaseComponent
 	{
 		[Bindable]
@@ -66,6 +68,13 @@ package geb.controls
 		public static const HORIZONTAL:String = "horizontal";
 		public static const VERTICAL:String = "vertical";
 		
+		private var _isDragging:Boolean;
+		
+		public function get isDragging():Boolean
+		{
+			return _isDragging;
+		}
+
 		/**
 		 * Initializes the component.
 		 */
@@ -298,6 +307,7 @@ package geb.controls
 			}
 			
 			dispatchEvent(new Event(Event.CHANGE));
+			dispatchEvent(new Event("backClick"));
 		}
 		
 		/**
@@ -308,6 +318,7 @@ package geb.controls
 		{
 			stage.addEventListener(MouseEvent.MOUSE_UP, onDrop);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, onSlide);
+			_isDragging = true;
 			if(orientation == HORIZONTAL)
 			{
 				var xStart:Number = ignoreThumbSize? - thumb.width * 0.5 : 0;
@@ -329,6 +340,8 @@ package geb.controls
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
 			stage.removeEventListener(MouseEvent.MOUSE_MOVE, onSlide);
 			stopDrag();
+			dispatchEvent(new Event("backClick"));
+			_isDragging = false;
 		}
 		
 		/**

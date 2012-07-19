@@ -6,7 +6,14 @@
 	<fx:Script>
 		<![CDATA[
 			
+			private var _draging:Boolean;
+			
 			private var _dragable:Boolean = true;
+
+			public function get draging():Boolean
+			{
+				return _draging;
+			}
 
 			public function get dragable():Boolean
 			{
@@ -30,7 +37,7 @@
 			private function onDrag(e:MouseEvent):void
 			{
 				if(dragable == false) return;
-				
+				_draging = true;
 				stage.addEventListener(MouseEvent.MOUSE_UP, onDrop);
 				startDrag(false,dragBounds);
 			}
@@ -39,6 +46,7 @@
 			{
 				stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
 				stopDrag();
+				_draging = false;
 			}
 		]]>
 	</fx:Script>
