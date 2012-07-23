@@ -7,9 +7,7 @@ package geb.shapes
 	import flash.display.Graphics;
 	import flash.geom.Point;
 	
-	import geb.common.BaseComponent;
-
-	public class LineUI extends BaseComponent
+	public class Line extends BaseShape
 	{
 		private var _start:Point;
 
@@ -34,22 +32,6 @@ package geb.shapes
 		public function set end(value:Point):void
 		{
 			_end = value;
-			this.invalidate();
-		}
-
-		
-		private var _color:uint = 0xFFFFFF;
-		
-		public function get color():uint
-		{
-			return _color;
-		}
-		
-		public function set color(value:uint):void
-		{
-			if(_color == value) return;
-			
-			_color = value;
 			this.invalidate();
 		}
 		

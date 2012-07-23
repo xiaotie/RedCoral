@@ -5,11 +5,50 @@
 package geb.shapes
 {
 	import flash.display.BitmapData;
+	import flash.display.Shape;
+	import flash.events.Event;
 	
 	import geb.common.BaseComponent;
-
-	public class BaseShapeUI extends BaseComponent
+	
+	public class BaseShape extends Shape
 	{
+		protected var inited:Boolean = false;
+		public var updateNextFrame:Boolean = true;
+		
+		public function BaseShape()
+		{
+			super();
+			invalidate();
+		}
+		
+		public function invalidate():void
+		{
+			if(updateNextFrame == true)
+			{
+				removeEventListener(Event.ENTER_FRAME, onInvalidate);
+				addEventListener(Event.ENTER_FRAME, onInvalidate);
+			}
+			else
+			{
+				onInvalidate(null);
+			}
+		}
+		
+		protected function onInvalidate(event:Event):void
+		{
+			removeEventListener(Event.ENTER_FRAME, onInvalidate);
+			draw();
+			
+			if(inited == false)
+			{
+				inited = true;
+			}
+		}
+		
+		public function draw():void
+		{
+		}
+		
 		private var _color:uint = 0xFFFFFF;
 		
 		public function get color():uint
@@ -37,14 +76,14 @@ package geb.shapes
 			_fillAlpha = value;
 			this.invalidate();
 		}
-
+		
 		private var _texture:BitmapData;
-
+		
 		public function get texture():BitmapData
 		{
 			return _texture;
 		}
-
+		
 		public function set texture(value:BitmapData):void
 		{
 			_texture = value;

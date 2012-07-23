@@ -11,6 +11,10 @@
     <classEntry path="geb.utils.MD5"/>
     <classEntry path="geb.utils.IntUtil"/>
     <classEntry path="geb.preloaders.BusyIndicator"/>
+    <classEntry path="geb.shapes.BaseShape"/>
+    <classEntry path="geb.shapes.Ellipse"/>
+    <classEntry path="geb.shapes.Line"/>
+    <classEntry path="geb.shapes.Polygon"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

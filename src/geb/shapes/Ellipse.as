@@ -7,8 +7,8 @@ package geb.shapes
 	import flash.display.Graphics;
 	
 	import geb.common.BaseComponent;
-
-	public class EllipseUI extends BaseShapeUI
+	
+	public class Ellipse extends BaseShape
 	{
 		public override function draw():void
 		{

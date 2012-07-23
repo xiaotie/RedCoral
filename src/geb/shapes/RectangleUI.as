@@ -1,3 +1,7 @@
+/**
+ * @author xiaotie@geblab.com 
+ */
+
 package geb.shapes
 {
 	import flash.display.Graphics;
