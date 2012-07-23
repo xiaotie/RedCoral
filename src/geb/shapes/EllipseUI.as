@@ -4,7 +4,7 @@ package geb.shapes
 	
 	import geb.common.BaseComponent;
 
-	public class Ellipse extends BaseShape
+	public class EllipseUI extends BaseShapeUI
 	{
 		public override function draw():void
 		{

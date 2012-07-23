@@ -5,7 +5,7 @@ package geb.shapes
 	
 	import geb.common.BaseComponent;
 
-	public class Line extends BaseComponent
+	public class LineUI extends BaseComponent
 	{
 		private var _start:Point;
 

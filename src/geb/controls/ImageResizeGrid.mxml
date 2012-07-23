@@ -462,48 +462,48 @@
 
 	
 	<!-- 控制柄 -->
-	<shapes:Rectangle color="{borderColor}" 
+	<shapes:RectangleUI color="{borderColor}" 
 					  height="{handleLength}" width="{borderThickness}" 
 					  x="{0.5*width-borderThickness*0.5}" y="{-handleLength}"
 					  visible="{and(rotatable,showHandle)}" />
 	<!-- 控制柄上的控制点  -->
-	<shapes:Rectangle id="cpHandle" color="{bgBorderColor}"
+	<shapes:RectangleUI id="cpHandle" color="{bgBorderColor}"
 					  descriptor="{new RectangleDescriptor(0.5*width,-handleLength,controlPointWidth)}"
 					  visible="{and(rotatable,showHandle)}" />
 	<!-- 控制柄上的鼠标响应点  -->
-	<shapes:Ellipse id="mpHandle" color="0xFF0000" alpha="0"
+	<shapes:EllipseUI id="mpHandle" color="0xFF0000" alpha="0"
 					descriptor="{new CircularDescriptor(0.5*width,-handleLength,controlPointWidth + controlPointResponseExtend)}"
 					visible="{and(rotatable,showHandle)}" />
 	<!-- 左上控制点 -->
-	<shapes:Rectangle id="cpLeftTop" color="{bgBorderColor}"
+	<shapes:RectangleUI id="cpLeftTop" color="{bgBorderColor}"
 					  descriptor="{new RectangleDescriptor(0,0,controlPointWidth)}"
 					  visible="{showControlPoints}" />
 	<!-- 左上鼠标响应点  -->
-	<shapes:Ellipse id="mpLeftTop" color="0xFF0000" alpha="0" 
+	<shapes:EllipseUI id="mpLeftTop" color="0xFF0000" alpha="0" 
 					descriptor="{new CircularDescriptor(0,0,controlPointWidth + controlPointResponseExtend)}"
 					visible="{showHandle}" />
 	<!-- 右上控制点 -->
-	<shapes:Rectangle id="cpRightTop" color="{bgBorderColor}"
+	<shapes:RectangleUI id="cpRightTop" color="{bgBorderColor}"
 					  descriptor="{new RectangleDescriptor(width,0,controlPointWidth)}"
 					  visible="{showControlPoints}" />
 	<!-- 右上鼠标响应点  -->
-	<shapes:Ellipse id="mpRightTop" color="0xFF0000" alpha="0" 
+	<shapes:EllipseUI id="mpRightTop" color="0xFF0000" alpha="0" 
 					descriptor="{new CircularDescriptor(width,0,controlPointWidth + controlPointResponseExtend)}"
 					visible="{showHandle}" />
 	<!-- 左下控制点 -->
-	<shapes:Rectangle id="cpLeftDown" color="{bgBorderColor}"
+	<shapes:RectangleUI id="cpLeftDown" color="{bgBorderColor}"
 					  descriptor="{new RectangleDescriptor(0,height,controlPointWidth)}"
 					  visible="{showControlPoints}" />
 	<!-- 左下鼠标响应点  -->
-	<shapes:Ellipse id="mpLeftDown" color="0xFF0000" alpha="0" 
+	<shapes:EllipseUI id="mpLeftDown" color="0xFF0000" alpha="0" 
 					descriptor="{new CircularDescriptor(0,height,controlPointWidth + controlPointResponseExtend)}"
 					visible="{showHandle}" />
 	<!-- 右下控制点 -->
-	<shapes:Rectangle id="cpRightDown" color="{bgBorderColor}"
+	<shapes:RectangleUI id="cpRightDown" color="{bgBorderColor}"
 					  descriptor="{new RectangleDescriptor(width,height,controlPointWidth)}"
 					  visible="{showControlPoints}" />
 	<!-- 右下鼠标响应点  -->
-	<shapes:Ellipse id="mpRightDown" color="0xFF0000" alpha="0" 
+	<shapes:EllipseUI id="mpRightDown" color="0xFF0000" alpha="0" 
 					descriptor="{new CircularDescriptor(width,height,controlPointWidth + controlPointResponseExtend)}"
 					visible="{showHandle}" />
 	<common:BaseContainer id="cvsAttach" x="0"

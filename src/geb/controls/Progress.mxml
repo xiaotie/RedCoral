@@ -23,5 +23,5 @@
 			}
 		]]>
 	</fx:Script>
-	<shapes:Rectangle x="1" y="1" color="{fillColor}" height="{height-2}" width="{getWidth(percent)}" />
+	<shapes:RectangleUI x="1" y="1" color="{fillColor}" height="{height-2}" width="{getWidth(percent)}" />
 </containers:Canvas>

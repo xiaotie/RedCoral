@@ -1,5 +1,7 @@
 package geb.shapes
 {
+	import flash.display.DisplayObject;
+
 	public class CircularDescriptor extends Descriptor
 	{
 		public var centerX:Number;
@@ -13,7 +15,7 @@ package geb.shapes
 			this.radius = radius;
 		}
 		
-		public override function resize(shape:BaseShape):void
+		public override function resize(shape:DisplayObject):void
 		{
 			shape.x = centerX - radius;
 			shape.y = centerY - radius;

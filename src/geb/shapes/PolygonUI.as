@@ -2,7 +2,7 @@ package geb.shapes
 {
 	import flash.display.Graphics;
 
-	public class Polygon extends BaseShape
+	public class PolygonUI extends BaseShapeUI
 	{
 		private var _points:Array;
 

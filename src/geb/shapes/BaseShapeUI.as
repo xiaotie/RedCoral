@@ -4,7 +4,7 @@ package geb.shapes
 	
 	import geb.common.BaseComponent;
 
-	public class BaseShape extends BaseComponent
+	public class BaseShapeUI extends BaseComponent
 	{
 		private var _color:uint = 0xFFFFFF;
 		

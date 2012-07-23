@@ -1,5 +1,7 @@
 package geb.shapes
 {
+	import flash.display.DisplayObject;
+
 	public class RectangleDescriptor  extends Descriptor
 	{
 		public var centerX:Number;
@@ -15,7 +17,7 @@ package geb.shapes
 			this.height = isNaN(height)?width:height;
 		}
 		
-		public override function resize(shape:BaseShape):void
+		public override function resize(shape:DisplayObject):void
 		{
 			shape.x = centerX - width * 0.5;
 			shape.y = centerY - height * 0.5;

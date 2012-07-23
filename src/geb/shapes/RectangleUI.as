@@ -2,7 +2,7 @@ package geb.shapes
 {
 	import flash.display.Graphics;
 
-	public class Rectangle extends BaseShape
+	public class RectangleUI extends BaseShapeUI
 	{
 		private var _corner:Number = NaN;
 

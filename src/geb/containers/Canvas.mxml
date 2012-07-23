@@ -36,7 +36,7 @@
 			public var bgBorderAlpha:Number = 1;
 		]]>
 	</fx:Script>
-	<shapes:Rectangle id="background" width="{width}" height="{height}"
+	<shapes:RectangleUI id="background" width="{width}" height="{height}"
 					   corner="{bgCorner}" corners="{bgCorners}"
 					   color="{bgColor}"
 					   alpha="{bgEnabled?bgAlpha:bgAlpha*0.3}"

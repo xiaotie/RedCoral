@@ -1,8 +1,10 @@
 package geb.shapes
 {
+	import flash.display.DisplayObject;
+
 	public class Descriptor
 	{
-		public function resize(shape:BaseShape):void
+		public function resize(shape:DisplayObject):void
 		{
 			
 		}
