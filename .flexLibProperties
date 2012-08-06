@@ -15,6 +15,7 @@
     <classEntry path="geb.shapes.Ellipse"/>
     <classEntry path="geb.shapes.Line"/>
     <classEntry path="geb.shapes.Polygon"/>
+    <classEntry path="geb.shapes.Rectangle"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

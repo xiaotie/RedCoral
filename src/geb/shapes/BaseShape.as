@@ -12,6 +12,9 @@ package geb.shapes
 	
 	public class BaseShape extends Shape
 	{
+		protected var _width:Number = NaN;
+		protected var _height:Number = NaN;
+
 		protected var inited:Boolean = false;
 		public var updateNextFrame:Boolean = true;
 		
@@ -128,6 +131,28 @@ package geb.shapes
 		{
 			_borderThickness = value;
 			this.invalidate();
+		}
+		
+		override public function set width(w:Number):void
+		{
+			_width = w;
+			invalidate();
+		}
+		
+		override public function get width():Number
+		{
+			return _width;
+		}
+		
+		override public function set height(h:Number):void
+		{
+			_height = h;
+			invalidate();
+		}
+		
+		override public function get height():Number
+		{
+			return _height;
 		}
 		
 		private var _descriptor:Descriptor;
