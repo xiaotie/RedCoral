@@ -38,7 +38,7 @@
 	</fx:Script>
 	<shapes:RectangleUI id="background" width="{width}" height="{height}"
 					   corner="{bgCorner}" corners="{bgCorners}"
-					   color="{bgColor}"
+					   color="{bgColor}" updateNextFrame="{updateNextFrame}"
 					   alpha="{bgEnabled?bgAlpha:bgAlpha*0.3}"
 					   borderColor="{bgBorderColor}"
 					   borderThickness="{bgBorderThickness}"
