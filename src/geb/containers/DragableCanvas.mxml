@@ -34,9 +34,16 @@
 			
 			public var dragBounds:Rectangle;
 			
+			protected function canDrag(e:MouseEvent):Boolean
+			{
+				return true;
+			}
+			
 			private function onDrag(e:MouseEvent):void
 			{
 				if(dragable == false) return;
+				if(canDrag(e) == false) return;
+				
 				_draging = true;
 				stage.addEventListener(MouseEvent.MOUSE_UP, onDrop);
 				startDrag(false,dragBounds);

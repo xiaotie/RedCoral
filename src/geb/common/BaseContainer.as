@@ -104,8 +104,8 @@ package geb.common
 		
 		public function setCenter(obj:DisplayObject):void
 		{
-			obj.x = 0.5 * (this.width - obj.width);
-			obj.y = 0.5 * (this.height - obj.height);
+			obj.x = Math.round(0.5 * (this.width - obj.width));
+			obj.y = Math.round(0.5 * (this.height - obj.height));
 		}
 	}
 }

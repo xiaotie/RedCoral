@@ -20,6 +20,8 @@ package geb.controls
 		public static const MODE_9GRID:String = "9grid";
 		
 		private var _horizontalAlign:String = "center";
+		
+		public var smoothing:Boolean = true;
 
 		[Inspectable(defaultValue = "center", enumeration = "left,center,right,none", category = "String")]
 		public function get horizontalAlign():String
@@ -62,6 +64,8 @@ package geb.controls
 		
 		[Bindable]
 		public var sourceScale9Grid:Rectangle;
+		
+		public var maintainAspectRatio:Boolean = false;
 		
 		public var mode:String = MODE_9GRID;
 		
@@ -126,6 +130,11 @@ package geb.controls
 			clear();
 			
 			var d:DisplayObject = _loader.content;
+			loadContent(d);
+		}
+		
+		private function loadContent(d:DisplayObject):void
+		{
 			var child:DisplayObject = d;
 			if(d is AVM1Movie)
 			{
@@ -147,7 +156,14 @@ package geb.controls
 				{
 					case "none":
 						child.x = 0;
-						child.scaleX = xx;
+						if(scale9Grid != null)
+						{
+							child.scaleX = xx;
+						}
+						else
+						{
+							child.width = width;
+						}
 						break;
 					case "left":
 						child.x = 0;
@@ -167,8 +183,15 @@ package geb.controls
 				switch(verticalAlign)
 				{
 					case "none":
-						child.scaleY = scale;
-						child.scaleY = yy;
+						child.y = yy;
+						if(scale9Grid != null)
+						{
+							child.scaleY = scale;
+						}
+						else
+						{
+							child.width = width;
+						}
 						break;
 					case "top":
 						child.y = 0;
@@ -192,6 +215,7 @@ package geb.controls
 				this.dispatchEvent(new Event(Event.RESIZE));
 			}
 			this._bgBitmap = child;
+			child.scale9Grid = this.scale9Grid;
 			addChild(child);
 			this.dispatchEvent(new Event(Event.COMPLETE));
 		}
@@ -214,20 +238,37 @@ package geb.controls
 			clear();
 			
 			if(bmpData == null) return;
-			
-			if(isNaN(this.width) || isNaN(this.height))
-			{
-				this._width = bmpData.width;
-				this._height = bmpData.height;
-				this.dispatchEvent(new Event(Event.RESIZE));
-			}
-			
-			var sb:ScaleBitmap = new ScaleBitmap(bmpData,"auto",true);
-			sb.scale9Grid = this.sourceScale9Grid;
-			sb.setSize(this.width,this.height);
-			_bgBitmap = sb;
-			this.addChild(sb);
-			this.dispatchEvent(new Event(Event.COMPLETE));
+			var bmp:Bitmap = new Bitmap(bmpData,"auto", smoothing);
+			this.loadContent(bmp);
+
+//			
+//			if(isNaN(this.width) || isNaN(this.height))
+//			{
+//				this._width = bmpData.width;
+//				this._height = bmpData.height;
+//				this.dispatchEvent(new Event(Event.RESIZE));
+//			}
+//						
+//			if(sourceScale9Grid != null)
+//			{
+//				var sb:ScaleBitmap = new ScaleBitmap(bmpData,"auto",smoothing);
+//				sb.scale9Grid = this.sourceScale9Grid;
+//				sb.setSize(this.width,this.height);
+//				_bgBitmap = sb;
+//				this.addChild(sb);
+//			}
+//			else
+//			{
+//				if(this.width == 0) this.width = bmpData.width;
+//				if(this.height == 0) this.height = bmpData.height;
+//				
+//				
+//				bmp.width = width;
+//				bmp.height = height;
+//				_bgBitmap = bmp;
+//				this.addChild(bmp);
+//			}
+//			this.dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
 		protected function drawDisplayObject(obj:DisplayObject):void

@@ -58,6 +58,8 @@ package geb.common
 		protected var _tag:int = -1;
 		protected var _enabled:Boolean = true;
 		
+		private var bgCanvas:PopUpCanvas;
+		
 		public var updateNextFrame:Boolean = true;
 		
 		public var toolTipClass:Class;
@@ -115,16 +117,16 @@ package geb.common
 		
 		public function show(x:Number = NaN, y:Number = NaN):void
 		{
-			var pop:PopUpCanvas = new PopUpCanvas();
-			pop.show();
-			pop.setContent(this,x,y);
+			bgCanvas = new PopUpCanvas();
+			bgCanvas.show();
+			bgCanvas.setContent(this,x,y);
 		}
 		
 		public function showDialog(x:Number = NaN, y:Number = NaN):void
 		{
-			var pop:PopUpCanvas = new PopUpCanvas();
-			pop.showDialog();	
-			pop.setContent(this,x,y);
+			bgCanvas = new PopUpCanvas();
+			bgCanvas.showDialog();	
+			bgCanvas.setContent(this,x,y);
 		}
 		
 		/**
@@ -297,6 +299,16 @@ package geb.common
 			super.y = value;
 		}
 		
+		override public function get x():Number
+		{
+			return super.x;
+		}
+		
+		override public function get y():Number
+		{
+			return super.y;
+		}
+		
 		/**
 		 * Sets/gets in integer that can identify the component.
 		 */
@@ -327,6 +339,12 @@ package geb.common
 		
 		public function close():void
 		{
+			if(bgCanvas != null)
+			{
+				bgCanvas.close();
+				bgCanvas = null;
+			}
+			
 			if(this.parent != null)
 			{
 				this.parent.removeChild(this);
