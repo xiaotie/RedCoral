@@ -1,17 +1,20 @@
 package geb.utils
 {
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.ui.Mouse;
-	
-	import mx.managers.CursorManager;
+	import flash.ui.MouseCursorData;
 	
 	import geb.common.Application;
 	import geb.controls.Image;
+	
+	import mx.managers.CursorManager;
 	
 	public class CursorHelper
 	{
@@ -24,6 +27,7 @@ package geb.utils
 		{
 			bitmap = null;
 			instance.Cursor = NORMAL;
+			instance.rotation = 0;
 		}
 		
 		public static function useCustomCursor(bmp:Bitmap=null, registAtCenter:Boolean = false):void
@@ -43,6 +47,20 @@ package geb.utils
 				}
 			}
 			instance.Cursor = CUSTOM;
+		}
+		
+		public static function get rotation():Number
+		{
+			return instance.rotation;
+		}
+		
+		public static function set rotation(val:Number):void
+		{
+			instance.rotation = val;
+			if(instance.cursor != null)
+			{
+				instance.cursor.rotation = val;
+			}
 		}
 		
 		public static function useNormalCursor():void
@@ -65,9 +83,10 @@ package geb.utils
 		}
 		
 		private var current:String;  
-		private var cursor:Bitmap;  
+		private var cursor:Sprite;  
 		private var xOffset:Number = 0;
 		private var yOffset:Number = 0;
+		private var rotation:Number = 0;
 		
 		public function CursorHelper()  
 		{  
@@ -76,7 +95,7 @@ package geb.utils
 		
 		public function set Cursor( val:String ):void  
 		{  
-			if(this.current == val && this.cursor == bitmap) return;
+			if(this.current == val && this.cursor != null) return;
 			if(bitmap == null && val != NORMAL ) return;
 			
 			this.current = val;  
@@ -90,23 +109,30 @@ package geb.utils
 			if (this.current == NORMAL)  
 			{  
 				Mouse.show();  
-				this.cursor = null;  
+				this.cursor = null;
 			}  
 			else  
 			{  
 				// Hide the real mouse 
-				Mouse.hide();  
-				this.cursor = bitmap;
-//				this.cursor.mouseEnabled = false;  
-//				this.cursor.mouseChildren = false;  
+				Mouse.hide();
+				
+				var s:Sprite = new Sprite();
+				bitmap.x = this.xOffset;
+				bitmap.y = this.yOffset;
+				bitmap.smoothing = true;
+				s.addChild(bitmap);
+				this.cursor = s;
+				this.cursor.mouseEnabled = false;  
+				this.cursor.mouseChildren = false;  
 				this.cursor.cacheAsBitmap = true; 
-				this.cursor.x = this.stage.mouseX + this.xOffset;  
-				this.cursor.y = this.stage.mouseY + this.yOffset;  
+				this.cursor.x = this.stage.mouseX;  
+				this.cursor.y = this.stage.mouseY;  
 				this.stage.addChild( this.cursor );  
 				this.stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoved );  
 				this.stage.addEventListener( Event.MOUSE_LEAVE, mouseLeft );  
 			}  
-		}  
+		}
+		
 		public function get Cursor():String  
 		{  
 			return this.current;  
@@ -115,8 +141,8 @@ package geb.utils
 		public function mouseMoved( e:MouseEvent ):void  
 		{  
 			this.cursor.visible = true;  
-			this.cursor.x = e.stageX + this.xOffset;  
-			this.cursor.y = e.stageY + this.yOffset;  
+			this.cursor.x = e.stageX;  
+			this.cursor.y = e.stageY;  
 			e.updateAfterEvent();  
 		}  
 		

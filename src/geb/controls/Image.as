@@ -65,7 +65,7 @@ package geb.controls
 		[Bindable]
 		public var sourceScale9Grid:Rectangle;
 		
-		public var maintainAspectRatio:Boolean = false;
+		public var maintainAspectRatio:Boolean = true;
 		
 		public var mode:String = MODE_9GRID;
 		
@@ -147,10 +147,11 @@ package geb.controls
 				Bitmap(d).smoothing = true;
 			}
 			
-			if(this.width >= 0 && this.height >= 0)
+			if(this.width > 0 && this.height > 0)
 			{
 				var xx:Number = this.width / child.width;
 				var yy:Number = this.height / child.height;
+				
 				var scale:Number = Math.min(xx,yy);
 				switch(horizontalAlign)
 				{
@@ -215,7 +216,6 @@ package geb.controls
 				this.dispatchEvent(new Event(Event.RESIZE));
 			}
 			this._bgBitmap = child;
-			child.scale9Grid = this.scale9Grid;
 			addChild(child);
 			this.dispatchEvent(new Event(Event.COMPLETE));
 		}
@@ -238,8 +238,19 @@ package geb.controls
 			clear();
 			
 			if(bmpData == null) return;
-			var bmp:Bitmap = new Bitmap(bmpData,"auto", smoothing);
-			this.loadContent(bmp);
+			
+			if(sourceScale9Grid != null && this.width > 0 && this.height > 0)
+			{
+				var sb:ScaleBitmap = new ScaleBitmap(bmpData,"auto",smoothing);
+				sb.scale9Grid = this.sourceScale9Grid;
+				sb.setSize(this.width,this.height);
+				this.loadContent(sb);
+			}
+			else
+			{
+				var bmp:Bitmap = new Bitmap(bmpData,"auto", smoothing);
+				this.loadContent(bmp);
+			}
 
 //			
 //			if(isNaN(this.width) || isNaN(this.height))

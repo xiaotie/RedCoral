@@ -212,8 +212,10 @@ package geb.common
 		 */
 		public function move(xpos:Number, ypos:Number):void
 		{
-			x = Math.round(xpos);
-			y = Math.round(ypos);
+			x = xpos;
+			y = ypos;
+//			x = Math.round(xpos);
+//			y = Math.round(ypos);
 		}
 		
 		/**
