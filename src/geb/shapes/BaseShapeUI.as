@@ -5,12 +5,46 @@
 package geb.shapes
 {
 	import flash.display.BitmapData;
+	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
 	
 	import geb.common.BaseComponent;
 
 	public class BaseShapeUI extends BaseComponent
 	{
 		private var _color:uint = 0xFFFFFF;
+		private var _draging:Boolean;
+		private var _dragable:Boolean = false;
+		
+		public function get draging():Boolean
+		{
+			return _draging;
+		}
+		
+		public function get dragable():Boolean
+		{
+			return _dragable;
+		}
+		
+		public function set dragable(value:Boolean):void
+		{
+			_dragable = value;
+			
+			this.removeEventListener(MouseEvent.MOUSE_DOWN, onDrag);
+			if(value == false)
+			{
+				if(stage != null)
+				{
+					onDrop(null);
+				}
+			}
+			else
+			{
+				this.addEventListener(MouseEvent.MOUSE_DOWN, onDrag);
+			}
+		}
+		
+		public var dragBounds:flash.geom.Rectangle;
 		
 		public function get color():uint
 		{
@@ -105,6 +139,28 @@ package geb.shapes
 			{
 				_descriptor.resize(this);
 			}
+		}
+		
+		protected function canDrag(e:MouseEvent):Boolean
+		{
+			return true;
+		}
+		
+		private function onDrag(e:MouseEvent):void
+		{
+			if(dragable == false) return;
+			if(canDrag(e) == false) return;
+			
+			_draging = true;
+			stage.addEventListener(MouseEvent.MOUSE_UP, onDrop);
+			startDrag(false,dragBounds);
+		}
+		
+		private function onDrop(e:MouseEvent):void
+		{
+			stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
+			stopDrag();
+			_draging = false;
 		}
 	}
 }

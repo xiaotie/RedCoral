@@ -15,7 +15,8 @@ package geb.utils
 	[Event(name=MouseEvent.MOUSE_UP,type="flash.events.MouseEvent")]
 	public class DragHelper extends EventDispatcher
 	{
-		private var target:Sprite; 
+		public var target:Sprite;
+		
 		private var stageHelper:StageHelper = new StageHelper();
 		
 		public function bind(obj:Sprite, boundary:Sprite = null):void
