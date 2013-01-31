@@ -48,6 +48,12 @@ package geb.shapes
 			}
 		}
 		
+		public function invalidateAndDraw():void
+		{
+			removeEventListener(Event.ENTER_FRAME, onInvalidate);
+			draw();
+		}
+		
 		public function draw():void
 		{
 		}
