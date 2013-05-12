@@ -80,6 +80,10 @@ package geb.utils
 			start = new Point(event.stageX,event.stageY);
 			movingTarget = event.target as Sprite;
 			current = start.clone();
+			if(movingTarget!=null)
+			{
+				this.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+			}
 		}
 		
 		private function onMouseMove(event:MouseEvent):void

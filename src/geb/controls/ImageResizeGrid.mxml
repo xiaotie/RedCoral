@@ -400,7 +400,7 @@
 					return;
 				}
 				
-				CursorHelper.useCustomCursor(new iconResize45() as Bitmap, true);
+				CursorHelper.useCustomCursor(new iconResize45() as Bitmap, "Resize45", true);
 			}
 			
 			private function useIconResize135():void
@@ -410,7 +410,7 @@
 					return;
 				}
 				
-				CursorHelper.useCustomCursor(new iconResize135() as Bitmap, true);
+				CursorHelper.useCustomCursor(new iconResize135() as Bitmap,"Resize135", true);
 			}
 			
 			private function useIconMove():void
@@ -420,7 +420,7 @@
 					return;
 				}
 				
-				CursorHelper.useCustomCursor(new iconMove() as Bitmap, true);
+				CursorHelper.useCustomCursor(new iconMove() as Bitmap,"Move", true);
 			}
 			
 			private function useIconRotate():void
@@ -430,7 +430,7 @@
 					return;
 				}
 				
-				CursorHelper.useCustomCursor(new iconRotate() as Bitmap, true);
+				CursorHelper.useCustomCursor(new iconRotate() as Bitmap,"Rotate", true);
 			}
 
 			private function onMouseOut(event:MouseEvent):void

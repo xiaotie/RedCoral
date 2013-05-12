@@ -191,7 +191,7 @@ package geb.controls
 						}
 						else
 						{
-							child.width = width;
+							child.height = height;
 						}
 						break;
 					case "top":

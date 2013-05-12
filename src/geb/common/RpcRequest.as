@@ -9,6 +9,7 @@ package geb.common
 	import flash.events.IOErrorEvent;
 	import flash.net.*;
 	import flash.net.URLLoaderDataFormat;
+	import flash.utils.ByteArray;
 	
 	public class RpcRequest
 	{
@@ -73,6 +74,9 @@ package geb.common
 			if(isBinary == true)
 			{
 				loader.dataFormat = URLLoaderDataFormat.BINARY;
+				req.contentType = "application/octet-stream";
+				req.method = URLRequestMethod.POST;
+				req.data = postData;
 			}
 			
 			loader.load(req);

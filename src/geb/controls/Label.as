@@ -146,7 +146,10 @@ package geb.controls
 			f.bold = this.bold;
 			f.underline = this.underline;
 			f.italic = this.italic;
-			if(fontFamily) f.font = fontFamily;
+			if(fontFamily)
+			{
+				f.font = fontFamily;
+			}
 			_tf.height = _height;
 			if(htmlText)
 			{

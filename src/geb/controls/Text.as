@@ -30,6 +30,8 @@ package geb.controls
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
+	import flash.events.FocusEvent;
+	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
@@ -39,15 +41,23 @@ package geb.controls
 	import geb.containers.spareTires.Panel;
 	
 	[Event(name="change", type="flash.events.Event")]
+	[Event(name="click", type="flash.events.MouseEvent")]
+	[Event(name="focusIn", type="flash.events.FocusEvent")]
+	[Event(name="focusOut", type="flash.events.FocusEvent")]
 	public class Text extends BaseComponent
 	{
 		protected var _tf:TextField;
 		protected var _text:String = "";
-		protected var _editable:Boolean = true;
 		protected var _panel:Panel;
 		protected var _selectable:Boolean = true;
 		protected var _html:Boolean = false;
 		protected var _format:TextFormat;
+		
+		public var fontName:String = "Microsoft YaHei";
+		public var fontSize:Number = 12;
+		public var fontColor:uint = 0x000000;
+		private var _align:String = "left";
+		private var _editable:Boolean = true;
 		
 		/**
 		 * Constructor
@@ -63,6 +73,34 @@ package geb.controls
 			setSize(200, 100);
 		}
 		
+		public function updateContent(txt:String):void
+		{
+			_text = txt;
+			this._tf.text = txt;
+		}
+		
+		public function get align():String
+		{
+			return _align;
+		}
+
+		public function set align(value:String):void
+		{
+			_align = value;
+			this.invalidate();
+		}
+
+		public function get editable():Boolean
+		{
+			return _editable;
+		}
+
+		public function set editable(value:Boolean):void
+		{
+			_editable = value;
+			this.invalidate();
+		}
+
 		/**
 		 * Initializes the component.
 		 */
@@ -76,28 +114,22 @@ package geb.controls
 		 */
 		override protected function addChildren():void
 		{
-//			_panel = new Panel(this);
-//			_panel.color = Style.TEXT_BACKGROUND;
-			
-			_format = new TextFormat(Style.fontName, Style.fontSize, 0x3E79B3);
-			
+			_format = new TextFormat(fontName, fontSize, fontColor);
 			_tf = new TextField();
 			_tf.x = 2;
 			_tf.y = 2;
 			_tf.height = _height;
-//			_tf.embedFonts = Style.embedFonts;
 			_tf.multiline = true;
 			_tf.wordWrap = true;
 			_tf.selectable = true;
-//			_tf.type = TextFieldType.INPUT;
 			_tf.defaultTextFormat = _format;
-			_tf.addEventListener(Event.CHANGE, onChange);			
+			_tf.addEventListener(Event.CHANGE, onChange);
+			_tf.addEventListener(MouseEvent.CLICK, onClick);
+			_tf.addEventListener(FocusEvent.FOCUS_IN, onFocusIn);
+			_tf.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
 			addChild(_tf);
 			draw();
 		}
-		
-		
-		
 		
 		///////////////////////////////////
 		// public methods
@@ -112,21 +144,15 @@ package geb.controls
 			
 			if(_tf == null) return;
 			
-//			_panel.setSize(_width, _height);
-//			_panel.draw();
-			
 			_tf.width = _width - 4;
 			_tf.height = _height - 4;
-			if(_html)
-			{
-				_tf.htmlText = _text;
-				_tf.condenseWhite = true;
-			}
-			else
-			{
-				_tf.text = _text;
-			}
-			if(_editable)
+			
+			var f:TextFormat = new TextFormat(fontName,fontSize,fontColor);
+			f.align = this.align;
+			f.font = fontName;
+			_tf.height = _height;
+			
+			if(editable)
 			{
 				_tf.mouseEnabled = true;
 				_tf.selectable = true;
@@ -138,11 +164,17 @@ package geb.controls
 				_tf.selectable = _selectable;
 				_tf.type = TextFieldType.DYNAMIC;
 			}
-			//_tf.setTextFormat(_format);
+			_tf.defaultTextFormat = f;
+			if(_html)
+			{
+				_tf.htmlText = _text;
+				_tf.condenseWhite = true;
+			}
+			else
+			{
+				_tf.text = _text;
+			}
 		}
-		
-		
-		
 		
 		///////////////////////////////////
 		// event handlers
@@ -154,6 +186,21 @@ package geb.controls
 		protected function onChange(event:Event):void
 		{
 			_text = _tf.text;
+			dispatchEvent(event);
+		}
+		
+		protected function onClick(event:Event):void
+		{
+			dispatchEvent(event);
+		}
+		
+		protected function onFocusIn(event:FocusEvent):void
+		{
+			dispatchEvent(event);
+		}
+		
+		protected function onFocusOut(event:FocusEvent):void
+		{
 			dispatchEvent(event);
 		}
 		
@@ -182,19 +229,6 @@ package geb.controls
 		public function get textField():TextField
 		{
 			return _tf;
-		}
-		
-		/**
-		 * Gets / sets whether or not this text component will be editable.
-		 */
-		public function set editable(b:Boolean):void
-		{
-			_editable = b;
-			invalidate();
-		}
-		public function get editable():Boolean
-		{
-			return _editable;
 		}
 		
 		/**

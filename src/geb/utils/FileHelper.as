@@ -9,6 +9,8 @@ package geb.utils
 
 	public class FileHelper
 	{
+		private static var isOpenning:Boolean = false;
+		
 		public static function openImageFile(
 			callback:Function = null, title:String = "图像文件", exts:String = '*.jpg; *.jpeg; *.gif; *.png'
 		):void
@@ -17,6 +19,13 @@ package geb.utils
 			var fr:FileReference = new FileReference();
 			if(callback != null)
 			{
+				fr.addEventListener(Event.ACTIVATE,
+					function(...args):void
+					{
+						isOpenning = false;
+					}
+				);
+				
 				fr.addEventListener(Event.SELECT,
 					function(...args):void
 					{
@@ -31,7 +40,12 @@ package geb.utils
 					}
 				);
 			}
-			fr.browse([f]);
+			
+			//if(isOpenning == false)
+			{
+				isOpenning = true;
+				fr.browse([f]);
+			}
 		}
 	}
 }

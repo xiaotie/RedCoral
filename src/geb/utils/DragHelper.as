@@ -17,24 +17,32 @@ package geb.utils
 	{
 		public var target:Sprite;
 		
+		private var _boundary:Sprite;
+		
 		private var stageHelper:StageHelper = new StageHelper();
 		
 		public function bind(obj:Sprite, boundary:Sprite = null):void
 		{
 			unbind();
-			target = obj;
 			
+			target = obj;
+			_boundary = boundary;
+			target.addEventListener(MouseEvent.MOUSE_DOWN, addEvents);
+		}
+		
+		private function addEvents(e:Event):void
+		{
 			if(global.stage != null)
 			{
-				stageHelper.bind(global.stage, boundary);
+				stageHelper.bind(global.stage, _boundary);
 			}
 			else
 			{
-				stageHelper.bind(geb.common.Application.instance.stage, boundary);
+				stageHelper.bind(geb.common.Application.instance.stage, _boundary);
 			}
 			
 			stageHelper.addEventListener(MoveEvent.MOVING, onMoving);
-			stageHelper.addEventListener(MouseEvent.MOUSE_UP,onMouseUp);
+			stageHelper.addEventListener(MouseEvent.MOUSE_UP,onMouseUp);			
 		}
 		
 		public function unbind():void
@@ -62,6 +70,9 @@ package geb.utils
 		private function onMouseUp(event:MouseEvent):void
 		{
 			this.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP));
+			stageHelper.removeEventListener(MoveEvent.MOVING, onMoving);
+			stageHelper.removeEventListener(MouseEvent.MOUSE_UP,onMouseUp);	
+			stageHelper.unbind();
 		}
 	}
 }

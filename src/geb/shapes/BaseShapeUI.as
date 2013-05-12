@@ -5,11 +5,13 @@
 package geb.shapes
 {
 	import flash.display.BitmapData;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	
 	import geb.common.BaseComponent;
 
+	[Event(name="dragStart", type="flash.events.Event")]
 	public class BaseShapeUI extends BaseComponent
 	{
 		private var _color:uint = 0xFFFFFF;
@@ -45,6 +47,9 @@ package geb.shapes
 		}
 		
 		public var dragBounds:flash.geom.Rectangle;
+		
+		public var dragingFilters:Array = null;
+		private var _oldFilters:Array = null;
 		
 		public function get color():uint
 		{
@@ -150,10 +155,12 @@ package geb.shapes
 		{
 			if(dragable == false) return;
 			if(canDrag(e) == false) return;
-			
+			_oldFilters = this.filters;
+			this.filters = dragingFilters;
 			_draging = true;
 			stage.addEventListener(MouseEvent.MOUSE_UP, onDrop);
 			startDrag(false,dragBounds);
+			this.dispatchEvent(new Event("dragStart"));
 		}
 		
 		private function onDrop(e:MouseEvent):void
@@ -161,6 +168,7 @@ package geb.shapes
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
 			stopDrag();
 			_draging = false;
+			this.filters = _oldFilters;
 		}
 	}
 }

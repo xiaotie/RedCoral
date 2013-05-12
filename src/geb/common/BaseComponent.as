@@ -33,6 +33,7 @@
 
 package geb.common
 {
+	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.display.Stage;
@@ -182,6 +183,16 @@ package geb.common
 			onInvalidate(null);
 		}
 		
+		public function invalidateNowAll():void
+		{
+			onInvalidate(null);
+			for(var i:int = 0; i < this.numChildren; i++)
+			{
+				var item:BaseComponent = this.getChildAt(i) as BaseComponent;
+				if(item != null) item.invalidateNowAll();
+			}
+		}
+		
 		/**
 		 * DropShadowFilter factory method, used in many of the components.
 		 * @param dist The distance of the shadow.
@@ -248,13 +259,46 @@ package geb.common
 		protected function onInvalidate(event:Event):void
 		{
 			removeEventListener(Event.ENTER_FRAME, onInvalidate);
-			draw();
+			
+			if(needDraw() == true)
+			{
+				draw();
+			}
 			
 			if(inited == false)
 			{
 				inited = true;
 				this.dispatchEvent(new Event("inited"));
 			}
+		}
+		
+		public override function get visible():Boolean
+		{
+			return super.visible;
+		}
+		
+		public override function set visible(val:Boolean):void
+		{
+			if(super.visible != val)
+			{
+				super.visible = val;
+				if(needDraw() == true)
+				{
+					invalidateNowAll();
+				}
+			}
+		}
+		
+		private function needDraw():Boolean
+		{
+			var ui:DisplayObject = this;
+			while(true)
+			{
+				if(ui.visible == false) return false;
+				if(ui.parent == null) break;
+				ui = ui.parent;
+			}
+			return true;
 		}
 		
 		///////////////////////////////////
