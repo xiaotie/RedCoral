@@ -55,7 +55,7 @@ package geb.controls
 		
 		public var fontName:String = "Microsoft YaHei";
 		public var fontSize:Number = 12;
-		public var fontColor:uint = 0x000000;
+		private var _fontColor:uint = 0x000000;
 		private var _align:String = "left";
 		private var _editable:Boolean = true;
 		
@@ -73,6 +73,17 @@ package geb.controls
 			setSize(200, 100);
 		}
 		
+		public function get fontColor():uint
+		{
+			return _fontColor;
+		}
+
+		public function set fontColor(value:uint):void
+		{
+			_fontColor = value;
+			this.invalidate();
+		}
+
 		public function updateContent(txt:String):void
 		{
 			_text = txt;
@@ -125,8 +136,8 @@ package geb.controls
 			_tf.defaultTextFormat = _format;
 			_tf.addEventListener(Event.CHANGE, onChange);
 			_tf.addEventListener(MouseEvent.CLICK, onClick);
-			_tf.addEventListener(FocusEvent.FOCUS_IN, onFocusIn);
-			_tf.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
+			//_tf.addEventListener(FocusEvent.FOCUS_IN, onFocusIn);
+			//_tf.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
 			addChild(_tf);
 			draw();
 		}
@@ -154,6 +165,7 @@ package geb.controls
 			
 			if(editable)
 			{
+				_tf.defaultTextFormat = f;
 				_tf.mouseEnabled = true;
 				_tf.selectable = true;
 				_tf.type = TextFieldType.INPUT;
@@ -163,8 +175,9 @@ package geb.controls
 				_tf.mouseEnabled = _selectable;
 				_tf.selectable = _selectable;
 				_tf.type = TextFieldType.DYNAMIC;
+				_tf.defaultTextFormat = f;
 			}
-			_tf.defaultTextFormat = f;
+			
 			if(_html)
 			{
 				_tf.htmlText = _text;

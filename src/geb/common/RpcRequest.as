@@ -46,7 +46,7 @@ package geb.common
 					trace("Loaded Failed:" + req.url);
 					if(fail != null)
 					{
-						if(this.args)
+						if(!args)
 						{
 							fail(event.target.data);
 						}

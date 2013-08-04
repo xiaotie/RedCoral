@@ -9,7 +9,6 @@ package geb.utils
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.ui.Mouse;
-	//import flash.ui.MouseCursorData;
 	
 	import geb.common.Application;
 	import geb.controls.Image;
@@ -30,15 +29,15 @@ package geb.utils
 			instance.rotation = 0;
 		}
 		
-		public static function useCustomCursor(bmp:Bitmap=null, cursorName:String = "CUSTOM", registAtCenter:Boolean = false):void
+		public static function useCustomCursor(bmp:Bitmap=null, cursorName:String = "CUSTOM", registAtCenter:Boolean = false, xOffset:Number = 0, yOffset:Number = 0):void
 		{
 			if(bmp != null)
 			{
 				bitmap = bmp;
 				if(registAtCenter == false)
 				{
-					instance.xOffset = 0;
-					instance.yOffset = 0;
+					instance.xOffset = xOffset;
+					instance.yOffset = yOffset;
 				}
 				else
 				{

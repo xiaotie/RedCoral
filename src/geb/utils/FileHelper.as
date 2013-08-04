@@ -12,7 +12,8 @@ package geb.utils
 		private static var isOpenning:Boolean = false;
 		
 		public static function openImageFile(
-			callback:Function = null, title:String = "图像文件", exts:String = '*.jpg; *.jpeg; *.gif; *.png'
+			callback:Function = null, title:String = "图像文件", exts:String = '*.jpg; *.jpeg; *.gif; *.png',
+			onCheckFile:Function = null
 		):void
 		{
 			var f:FileFilter = new FileFilter(title +" ("+ exts +")", exts);
@@ -29,7 +30,17 @@ package geb.utils
 				fr.addEventListener(Event.SELECT,
 					function(...args):void
 					{
-						fr.load();
+						if(onCheckFile != null)
+						{
+							if(onCheckFile(fr.name, fr.size) == true)
+							{
+								fr.load();
+							}
+						}
+						else
+						{
+							fr.load();
+						}
 					}
 				);
 				fr.addEventListener(Event.COMPLETE, 

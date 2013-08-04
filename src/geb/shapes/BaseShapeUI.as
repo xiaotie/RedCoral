@@ -12,6 +12,7 @@ package geb.shapes
 	import geb.common.BaseComponent;
 
 	[Event(name="dragStart", type="flash.events.Event")]
+	[Event(name="dragStop", type="flash.events.Event")]
 	public class BaseShapeUI extends BaseComponent
 	{
 		private var _color:uint = 0xFFFFFF;
@@ -168,6 +169,7 @@ package geb.shapes
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onDrop);
 			stopDrag();
 			_draging = false;
+			this.dispatchEvent(new Event("dragStop"));
 			this.filters = _oldFilters;
 		}
 	}
