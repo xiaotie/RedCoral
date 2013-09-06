@@ -186,6 +186,7 @@ package geb.common
 		public function invalidateNowAll():void
 		{
 			onInvalidate(null);
+
 			for(var i:int = 0; i < this.numChildren; i++)
 			{
 				var item:BaseComponent = this.getChildAt(i) as BaseComponent;

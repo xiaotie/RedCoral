@@ -37,6 +37,7 @@ package geb.controls
 	import flash.geom.Rectangle;
 	
 	import geb.common.BaseComponent;
+	import geb.shapes.RectangleUI;
 	
 	[Event(name="change", type="flash.events.Event")]
 	[Event(name="backClick", type="flash.events.Event")]
@@ -54,6 +55,9 @@ package geb.controls
 		
 		[Bindable]
 		public var orientation:String = "horizontal";
+		
+		private var _defaultTrackColor:uint = 0xcccccc;
+		private var _defaultHighlightColor:uint = 0x94c615;
 
 		public var trackClickable:Boolean = true;
 		
@@ -70,6 +74,28 @@ package geb.controls
 		
 		private var _isDragging:Boolean;
 		
+		public function get defaultHighlightColor():uint
+		{
+			return _defaultHighlightColor;
+		}
+
+		public function set defaultHighlightColor(value:uint):void
+		{
+			_defaultHighlightColor = value;
+			this.invalidate();
+		}
+
+		public function get defaultTrackColor():uint
+		{
+			return _defaultTrackColor;
+		}
+
+		public function set defaultTrackColor(value:uint):void
+		{
+			_defaultTrackColor = value;
+			this.invalidate();
+		}
+
 		public function get isDragging():Boolean
 		{
 			return _isDragging;
@@ -140,6 +166,29 @@ package geb.controls
 			var highlightRange:Number;
 			var pos:Number;
 			var ts:Number = thumbSize;
+			var dftTrackSize:Number = this.orientation == HORIZONTAL ? this.height : this.width;
+			
+			if(track == null)
+			{
+				var t:RectangleUI = new RectangleUI();
+				t.x = 0;
+				t.y = 0;
+				t.width = dftTrackSize;
+				t.height = dftTrackSize;
+				t.color = this.defaultTrackColor;
+				track = t;
+			}
+			
+			if(trackHighlight == null)
+			{
+				var th:RectangleUI = new RectangleUI();
+				th.x = 0;
+				th.y = 0;
+				th.width = dftTrackSize;
+				th.height = dftTrackSize;
+				th.color = this.defaultHighlightColor;
+				trackHighlight = th;
+			}
 			
 			if(orientation == HORIZONTAL)
 			{
@@ -147,10 +196,15 @@ package geb.controls
 				pos = (_value - _min) / (_max - _min) * range;
 				highlightRange = pos + ts * 0.5;
 				
-				if(thumb!=null)
+				if(track != null)
 				{
-					thumb.x = pos - (ignoreThumbSize ? thumb.width * 0.5 : 0);
-					thumb.y = 0.5 * (this.height - thumb.height);
+					track.width = width;
+					track.height = Math.min(height,track.height);
+					track.y = Math.max(0, 0.5 * (height - track.height));
+					if(track is BaseComponent)
+					{
+						BaseComponent(track).invalidateNow();
+					}
 				}
 				
 				if(trackHighlight != null)
@@ -164,15 +218,10 @@ package geb.controls
 					}
 				}
 				
-				if(track != null)
+				if(thumb!=null)
 				{
-					track.width = width;
-					track.height = Math.min(height,track.height);
-					track.y = Math.max(0, 0.5 * (height - track.height));
-					if(track is BaseComponent)
-					{
-						BaseComponent(track).invalidateNow();
-					}
+					thumb.x = pos - (ignoreThumbSize ? thumb.width * 0.5 : 0);
+					thumb.y = 0.5 * (this.height - thumb.height);
 				}
 			}
 			else
@@ -293,14 +342,14 @@ package geb.controls
 			var pos:Number;
 			if(orientation == HORIZONTAL)
 			{
-				pos = mouseX - ( ignoreThumbSize ? 0 : thumb.width * 0.5);
+				pos = mouseX - this.thumbSize * 0.5;
 				pos = Math.max(pos, 0);
 				pos = Math.min(pos, _width - ts);
 				value = pos / (width - ts) * (_max - _min) + _min;
 			}
 			else
 			{
-				pos = mouseY - ( ignoreThumbSize ? 0 : thumb.height * 0.5);
+				pos = mouseY - this.thumbSize * 0.5;
 				pos = Math.max(pos, 0);
 				pos = Math.min(pos, _height - ts);
 				value = (_height - ts - pos) / (height - ts) * (_max - _min) + _min;
@@ -321,7 +370,7 @@ package geb.controls
 			_isDragging = true;
 			if(orientation == HORIZONTAL)
 			{
-				var xStart:Number = ignoreThumbSize? - thumb.width * 0.5 : 0;
+				var xStart:Number =  ignoreThumbSize? - thumb.width * 0.5 : 0;;
 				thumb.startDrag(false, new Rectangle(xStart, thumb.y, _width - thumbSize, 0));
 			}
 			else
