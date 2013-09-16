@@ -56,6 +56,9 @@ package geb.controls
 		[Bindable]
 		public var orientation:String = "horizontal";
 		
+		[Bindable]
+		public var customMode:Boolean = false;
+		
 		private var _defaultTrackColor:uint = 0xcccccc;
 		private var _defaultHighlightColor:uint = 0x94c615;
 
@@ -168,7 +171,7 @@ package geb.controls
 			var ts:Number = thumbSize;
 			var dftTrackSize:Number = this.orientation == HORIZONTAL ? this.height : this.width;
 			
-			if(track == null)
+			if(track == null && customMode == true)
 			{
 				var t:RectangleUI = new RectangleUI();
 				t.x = 0;
@@ -179,7 +182,7 @@ package geb.controls
 				track = t;
 			}
 			
-			if(trackHighlight == null)
+			if(trackHighlight == null  && customMode == true)
 			{
 				var th:RectangleUI = new RectangleUI();
 				th.x = 0;
