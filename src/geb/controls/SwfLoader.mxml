@@ -1,0 +1,39 @@
+<common:BaseContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:controls="geb.controls.*"
+					  xmlns:common="geb.common.*"
+					  >
+	<fx:Script>
+		<![CDATA[
+			private var _source:*;
+			
+			public function get source():*
+			{
+				return _source;
+			}
+
+			public function set source(value:*):void
+			{
+				_source = value;
+				load();
+			}
+			
+			private function load():void
+			{
+				this.removeAllChildren();
+				if(_source)
+				{
+					var loader:Loader = new Loader();
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
+					loader.loadBytes(new _source(), new LoaderContext(false, loader.contentLoaderInfo.applicationDomain));
+				}
+			}
+			
+			private function onComplete(event:Event):void 
+			{
+				var obj:DisplayObject = event.target.content as DisplayObject;
+				this.addChild(obj);
+			}
+		]]>
+	</fx:Script>
+</common:BaseContainer>

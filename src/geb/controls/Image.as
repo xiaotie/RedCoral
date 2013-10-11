@@ -146,6 +146,10 @@ package geb.controls
 			{
 				Bitmap(d).smoothing = true;
 			}
+			else
+			{
+				
+			}
 			
 			if(this.width > 0 && this.height > 0)
 			{

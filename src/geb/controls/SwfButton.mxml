@@ -1,0 +1,15 @@
+<controls:SwfLoader xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:controls="geb.controls.*"
+					  buttonMode="true" useHandCursor="true"
+					  mouseChildren="{enable}" mouseEnabled="{enable}"
+					  mouseOver="{if(enable == true) alpha=0.6;}"
+					  mouseOut="{if(enable == true) alpha=1;}" 
+					  >
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			public var enable:Boolean = true;
+		]]>
+	</fx:Script>
+</controls:SwfLoader>

@@ -19,6 +19,8 @@
     <classEntry path="geb.shapes.Circle"/>
     <classEntry path="geb.shapes.CircleUI"/>
     <classEntry path="geb.shapes.LineDescriptor"/>
+    <classEntry path="geb.controls.SwfLoader"/>
+    <classEntry path="geb.controls.SwfButton"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
