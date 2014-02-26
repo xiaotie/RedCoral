@@ -21,6 +21,7 @@
     <classEntry path="geb.shapes.LineDescriptor"/>
     <classEntry path="geb.controls.SwfLoader"/>
     <classEntry path="geb.controls.SwfButton"/>
+    <classEntry path="geb.utils.Padding"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

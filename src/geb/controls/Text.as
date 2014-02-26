@@ -39,6 +39,8 @@ package geb.controls
 	import geb.common.BaseComponent;
 	import geb.common.Style;
 	import geb.containers.spareTires.Panel;
+	import geb.shapes.Rectangle;
+	import geb.utils.Padding;
 	
 	[Event(name="change", type="flash.events.Event")]
 	[Event(name="click", type="flash.events.MouseEvent")]
@@ -58,6 +60,16 @@ package geb.controls
 		private var _fontColor:uint = 0x000000;
 		private var _align:String = "left";
 		private var _editable:Boolean = true;
+		private var _restrict:String;
+		private var _bgColor:uint = 0xFFFFFF;
+		private var _borderColor:uint = 0x999999;
+		private var _borderThickness:int = 1;
+		private var _transparent:Boolean = false;
+		private var _bg:Rectangle;
+		
+		private var _padding:Padding;
+		private var _multiline:Boolean = true;
+		private var _wordWrap:Boolean = true;
 		
 		/**
 		 * Constructor
@@ -72,7 +84,95 @@ package geb.controls
 			super(parent, xpos, ypos);
 			setSize(200, 100);
 		}
+
+		public function get wordWrap():Boolean
+		{
+			return _wordWrap;
+		}
+
+		public function set wordWrap(value:Boolean):void
+		{
+			_wordWrap = value;
+			this.invalidate();
+		}
+
+		public function get multiline():Boolean
+		{
+			return _multiline;
+		}
+
+		public function set multiline(value:Boolean):void
+		{
+			_multiline = value;
+			this.invalidate();
+		}
+
+		public function get padding():Padding
+		{
+			return _padding;
+		}
+
+		public function set padding(value:Padding):void
+		{
+			_padding = value;
+			this.invalidate();
+		}
+
+		public function get transparent():Boolean
+		{
+			return _transparent;
+		}
+
+		public function set transparent(value:Boolean):void
+		{
+			_transparent = value;
+			this.invalidate();
+		}
+
+		public function get borderThickness():int
+		{
+			return _borderThickness;
+		}
+
+		public function set borderThickness(value:int):void
+		{
+			_borderThickness = value;
+			this.invalidate();
+		}
+
+		public function get borderColor():uint
+		{
+			return _borderColor;
+		}
+
+		public function set borderColor(value:uint):void
+		{
+			_borderColor = value;
+			this.invalidate();
+		}
+
+		public function get bgColor():uint
+		{
+			return _bgColor;
+		}
+
+		public function set bgColor(value:uint):void
+		{
+			_bgColor = value;
+			this.invalidate();
+		}
 		
+		public function get restrict():String
+		{
+			return _restrict;
+		}
+
+		public function set restrict(value:String):void
+		{
+			_restrict = value;
+			this.invalidate();
+		}
+
 		public function get fontColor():uint
 		{
 			return _fontColor;
@@ -111,7 +211,7 @@ package geb.controls
 			_editable = value;
 			this.invalidate();
 		}
-
+		
 		/**
 		 * Initializes the component.
 		 */
@@ -125,13 +225,25 @@ package geb.controls
 		 */
 		override protected function addChildren():void
 		{
+			_bg = new Rectangle();
+			addChild(_bg);
+			
 			_format = new TextFormat(fontName, fontSize, fontColor);
 			_tf = new TextField();
-			_tf.x = 2;
-			_tf.y = 2;
+			if(_padding == null)
+			{
+				_tf.x = 2;
+				_tf.y = 2;
+			}
+			else
+			{
+				_tf.x = _padding.left;
+				_tf.y = _padding.top;
+			}
+			_tf.restrict = _restrict;
 			_tf.height = _height;
-			_tf.multiline = true;
-			_tf.wordWrap = true;
+			_tf.multiline = _multiline;
+			_tf.wordWrap = this.wordWrap;
 			_tf.selectable = true;
 			_tf.defaultTextFormat = _format;
 			_tf.addEventListener(Event.CHANGE, onChange);
@@ -153,15 +265,38 @@ package geb.controls
 		{
 			super.draw();
 			
-			if(_tf == null) return;
+			if(_bg == null) return;
 			
-			_tf.width = _width - 4;
-			_tf.height = _height - 4;
+			_bg.width = this.width;
+			_bg.height = this.height;
+			_bg.color = this.bgColor;
+			_bg.fillAlpha = this.transparent ? 0 : 1;
+			_bg.borderThickness = this.borderThickness;
+			_bg.borderColor = this.borderColor;
+			_bg.draw();
+			
+			if(_tf == null) return;
 			
 			var f:TextFormat = new TextFormat(fontName,fontSize,fontColor);
 			f.align = this.align;
 			f.font = fontName;
-			_tf.height = _height;
+			_tf.multiline = multiline;
+			_tf.restrict = restrict;
+			_tf.wordWrap = wordWrap;
+			if(_padding == null)
+			{
+				_tf.x = 2;
+				_tf.y = 2;
+				_tf.width = _width - 4;
+				_tf.height = _height - 4;
+			}
+			else
+			{
+				_tf.x = _padding.left;
+				_tf.y = _padding.top;
+				_tf.width = _width - _padding.left - _padding.right;
+				_tf.height = _height - _padding.top - _padding.bottom;
+			}
 			
 			if(editable)
 			{
@@ -187,6 +322,7 @@ package geb.controls
 			{
 				_tf.text = _text;
 			}
+			
 		}
 		
 		///////////////////////////////////

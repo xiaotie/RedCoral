@@ -61,7 +61,7 @@ package geb.shapes
 				
 				if(isNaN(borderThickness) == false && borderThickness > 0)
 				{
-					g.lineStyle(this.borderThickness, this.borderColor, this.borderAlpha,true);
+					g.lineStyle(this.borderThickness, this.borderColor, this.borderAlpha,true, "normal","none","miter");
 				}
 				
 				if(this.texture)
