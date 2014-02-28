@@ -55,8 +55,8 @@ package geb.controls
 		protected var _html:Boolean = false;
 		protected var _format:TextFormat;
 		
-		public var fontName:String = "Microsoft YaHei";
-		public var fontSize:Number = 12;
+		private var _fontName:String = "Microsoft YaHei";
+		private var _fontSize:Number = 12;
 		private var _fontColor:uint = 0x000000;
 		private var _align:String = "left";
 		private var _editable:Boolean = true;
@@ -83,6 +83,28 @@ package geb.controls
 			this.text = text;
 			super(parent, xpos, ypos);
 			setSize(200, 100);
+		}
+
+		public function get fontSize():Number
+		{
+			return _fontSize;
+		}
+
+		public function set fontSize(value:Number):void
+		{
+			_fontSize = value;
+			this.invalidate();
+		}
+
+		public function get fontName():String
+		{
+			return _fontName;
+		}
+
+		public function set fontName(value:String):void
+		{
+			_fontName = value;
+			this.invalidate();
 		}
 
 		public function get wordWrap():Boolean
