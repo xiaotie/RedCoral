@@ -21,13 +21,20 @@
 			public override function show(x:Number = NaN, y:Number = NaN):void
 			{
 				this.background.visible = false;
-				Application.instance.addChild(this);
+				if(Application.instance.contains(this) == false)
+				{
+					Application.instance.addChild(this);
+				}
 			}
 			
 			public override function showDialog(x:Number = NaN, y:Number = NaN):void
 			{
 				this.bgEnabled = false;
-				Application.instance.addChild(this);
+				this.background.visible = true;
+				if(Application.instance.contains(this) == false)
+				{
+					Application.instance.addChild(this);
+				}
 			}
 			
 			public function setContent(obj:BaseComponent,x:Number = NaN, y:Number = NaN):void

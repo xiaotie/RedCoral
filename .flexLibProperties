@@ -22,6 +22,7 @@
     <classEntry path="geb.controls.SwfLoader"/>
     <classEntry path="geb.controls.SwfButton"/>
     <classEntry path="geb.utils.Padding"/>
+    <classEntry path="geb.utils.FlashFont"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

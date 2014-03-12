@@ -48,6 +48,11 @@ package geb.controls
 		public var fontSize:Number = Style.fontSize;
 		
 		private var _fontColor:uint = 0x000000;
+		
+		[Bindable]
+		public var textWidth:Number;
+		[Bindable]
+		public var textHeight:Number;
 
 		public function get fontColor():uint
 		{
@@ -123,7 +128,9 @@ package geb.controls
 			_tf.height = _height;
 			_tf.selectable = false;
 			_tf.mouseEnabled = false;
-			_tf.text = _text;			
+			_tf.text = _text;	
+			textWidth = _tf.textWidth;
+			textHeight = _tf.textHeight;
 			addChild(_tf);
 			draw();
 		}
@@ -163,6 +170,9 @@ package geb.controls
 				_tf.text = _text;
 			}
 			
+			textWidth = _tf.textWidth;
+			textHeight = _tf.textHeight;
+
 			if(_autoSize)
 			{
 				_tf.autoSize = TextFieldAutoSize.LEFT;

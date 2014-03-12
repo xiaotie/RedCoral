@@ -42,6 +42,7 @@ package geb.common
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.filters.DropShadowFilter;
+	import flash.geom.Point;
 	
 	import geb.containers.PopUpCanvas;
 	import geb.utils.CallLaterHelper;
@@ -63,7 +64,7 @@ package geb.common
 		
 		public var updateNextFrame:Boolean = true;
 		
-		public var toolTipClass:Class;
+		public var toolTipObject:BaseComponent;
 		
 		protected var inited:Boolean = false;
 		
@@ -118,14 +119,22 @@ package geb.common
 		
 		public function show(x:Number = NaN, y:Number = NaN):void
 		{
-			bgCanvas = new PopUpCanvas();
+			if(bgCanvas == null)
+			{
+				bgCanvas = new PopUpCanvas();
+			}
+			
 			bgCanvas.show();
 			bgCanvas.setContent(this,x,y);
 		}
 		
 		public function showDialog(x:Number = NaN, y:Number = NaN):void
 		{
-			bgCanvas = new PopUpCanvas();
+			if(bgCanvas == null)
+			{
+				bgCanvas = new PopUpCanvas();
+			}
+			
 			bgCanvas.showDialog();	
 			bgCanvas.setContent(this,x,y);
 		}
@@ -153,6 +162,25 @@ package geb.common
 		{
 			addChildren();
 			invalidate();
+		}
+		
+		private function onMouseOverForToolTip(e:MouseEvent):void
+		{
+			var w:Number = Application.instance.width;
+			var h:Number = Application.instance.height;
+			var tipX:Number = e.stageX;
+			var tipY:Number = e.stageY + 20;
+			tipX = Math.min(tipX, w - toolTipObject.width - 20);
+			if(tipY + toolTipObject.height > h)
+			{
+				tipY = this.localToGlobal(new Point()).y - toolTipObject.height - 10;
+			}
+			this.toolTipObject.show(tipX,tipY);
+		}
+		
+		private function onMouseOutForToolTip(e:MouseEvent):void
+		{
+			this.toolTipObject.close();
 		}
 		
 		/**
@@ -269,6 +297,13 @@ package geb.common
 			if(inited == false)
 			{
 				inited = true;
+				if(this.toolTipObject != null)
+				{
+					this.removeEventListener(MouseEvent.MOUSE_OVER, onMouseOverForToolTip);
+					this.removeEventListener(MouseEvent.MOUSE_OUT, onMouseOutForToolTip);
+					this.addEventListener(MouseEvent.MOUSE_OVER, onMouseOverForToolTip);
+					this.addEventListener(MouseEvent.MOUSE_OUT, onMouseOutForToolTip);
+				}
 				this.dispatchEvent(new Event("inited"));
 			}
 		}
