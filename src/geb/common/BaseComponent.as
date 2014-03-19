@@ -64,7 +64,7 @@ package geb.common
 		
 		public var updateNextFrame:Boolean = true;
 		
-		public var toolTipObject:BaseComponent;
+		private var _toolTipObject:BaseComponent;
 		
 		protected var inited:Boolean = false;
 		
@@ -74,6 +74,21 @@ package geb.common
 		public static const DRAW:String = "draw";
 		
 		private var _mouseHelper:MouseHelper;
+
+		public function get toolTipObject():BaseComponent
+		{
+			return _toolTipObject;
+		}
+
+		public function set toolTipObject(value:BaseComponent):void
+		{
+			var old:BaseComponent = _toolTipObject;
+			_toolTipObject = value;
+			if(old != null)
+			{
+				old.close();
+			}
+		}
 
 		private function get mouseHelper():MouseHelper
 		{
@@ -354,6 +369,16 @@ package geb.common
 		override public function get width():Number
 		{
 			return _width;
+		}
+		
+		override public function set alpha(alpha:Number):void
+		{
+			super.alpha = alpha;
+		}
+		
+		override public function get alpha():Number
+		{
+			return super.alpha;
 		}
 		
 		/**

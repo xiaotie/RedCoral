@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<common:BaseContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:common="geb.common.*"
+					  xmlns:controls="geb.controls.*" xmlns:shapes="geb.shapes.*"
+					  buttonMode="true" useHandCursor="true"
+					  width="120" height="20" 
+					  mouseOver="{isMouseOver = true;}" mouseOut="{isMouseOver = false;}" 
+					  click="fireOnClick()"
+					  >
+	<fx:Script>
+		<![CDATA[
+			import geb.controls.ListItem;
+			
+			[Bindable]
+			public var bgColor:uint;
+			[Bindable]
+			public var overBgColor:uint;
+			[Bindable]
+			public var fontColor:uint;
+			[Bindable]
+			public var overFontColor:uint;
+			
+			[Bindable]
+			private var isMouseOver:Boolean;
+			
+			[Bindable]
+			public var item:ListItem;
+			
+			public var onClick:Function;
+			
+			private function fireOnClick():void
+			{
+				if(onClick != null) onClick(item);
+			}
+		]]>
+	</fx:Script>
+	<shapes:RectangleUI width="{width}" height="{height}" color="{isMouseOver?overBgColor:bgColor}" />
+	<controls:Label x="5" text="{item.label}" fontColor="{isMouseOver?overFontColor:fontColor}" fontSize="12"
+					width="{width-5}" align="left" fontFamily="Microsoft YaHei"  mouseEnabled="false"/>
+</common:BaseContainer>

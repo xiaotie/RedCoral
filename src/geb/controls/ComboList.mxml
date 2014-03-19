@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<containers:Canvas  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:common="geb.common.*"
+					  xmlns:controls="geb.controls.*" xmlns:shapes="geb.shapes.*"
+					  xmlns:containers="geb.containers.*"
+					  width="400" height="30" 
+					  >
+	<fx:Script>
+		<![CDATA[
+			import geb.controls.ListItem;
+			import geb.controls.classes.ComboListItemUI;
+			
+			[Bindable]
+			public var selected:ListItem;
+			
+			public var onChange:Function;
+			
+			public var itemBgColor:uint = 0x424855;
+			public var itemOverBgColor:uint = 0x999999;
+			public var itemFontColor:uint = 0x999999;
+			public var itemOverFontColor:uint = 0x424855;
+			[Bindable]
+			public var fontColor:uint = 0x999999;
+			[Bindable]
+			public var fontSize:Number = 12;
+			
+			private var _dataSource:Vector.<ListItem>
+			private var expandHeight:Number = 0;
+			
+			[Bindable]
+			public function get dataSource():Vector.<ListItem>
+			{
+				return _dataSource;
+			}
+			
+			public function set dataSource(value:Vector.<ListItem>):void
+			{
+				_dataSource = value;
+				layout();
+			}
+			
+			private function isVisible(source:Vector.<ListItem>):Boolean
+			{
+				return source != null && source.length > 0;
+			}
+			
+			private function layout():void
+			{
+				var g:Graphics = list.graphics;
+				g.clear();
+				g.beginFill(itemBgColor);
+				g.moveTo(width-30,-10);
+				g.lineTo(width-30 -10,0);
+				g.lineTo(width-30 +10,0);
+				g.lineTo(width-30,-10);
+				g.endFill();
+				
+				list.removeAllChildren();
+				if(_dataSource == null || _dataSource.length == 0) return;
+				var vCount:int = 25;
+				var yOffset:Number = 0;
+				
+				var count:int = _dataSource.length;
+				
+				// 计算列数量
+				var cols:int = count/vCount;
+				if(cols * vCount < count) cols ++;
+				
+				var i:int = 0;
+				var h:Number = 0;
+				for each(var item:ListItem in _dataSource)
+				{
+					if(i%vCount == 0) yOffset = 0;
+					
+					// 列编号
+					var idxCol:int = i/vCount;
+					
+					var xOffset:Number = (-cols + idxCol + 1) * 100;
+					
+					var lui:ComboListItemUI = new ComboListItemUI();
+					lui.width = width;
+					lui.bgColor = itemBgColor;
+					lui.overBgColor = itemOverBgColor;
+					lui.fontColor = itemFontColor;
+					lui.overFontColor = itemOverFontColor;
+					lui.item = item;
+					lui.x = xOffset;
+					lui.y = yOffset;
+					lui.onClick = onItemClick;
+					list.addChild(lui);
+					yOffset += lui.height;
+					h = yOffset + lui.height + 10;
+					i++;
+				}
+				this.expandHeight = h;
+			}
+			
+			private function showList():void
+			{
+				if(list.visible == true) return;
+				
+				list.visible = true;
+				this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
+				this.stage.addEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
+			}
+			
+			private function onItemClick(item:ListItem):void
+			{
+				hideList();
+				this.selected = item;
+				if(onChange != null) onChange(item);
+			}
+			
+			private function hideList():void
+			{
+				if(list.visible == false) return;
+				this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
+				list.visible = false;
+			}
+			
+			private function onStageMouseMove(e:MouseEvent):void
+			{
+				var p:Point = new Point(e.stageX,e.stageY);
+				p = this.globalToLocal(p);
+				if(p.x < 0 || p.y < 0 || p.x > width || p.y > this.expandHeight)
+				{
+					this.hideList();
+				}
+			}
+		]]>
+	</fx:Script>
+	<common:BaseContainer width="{width}" height="{height}"
+						  mouseChildren="false" buttonMode="true" useHandCursor="true"
+						  mouseOver="{showList()}" click="{showList()}"
+						  >
+		<shapes:Rectangle width="{width}" height="{height}" alpha="0" />
+		<controls:Label x="5" y="-2" width="{width}" fontFamily="Microsoft YaHei"
+						fontSize="{fontSize}" height="{height}" fontColor="{fontColor}" 
+						text="{selected.label}" />
+		<shapes:Polygon x="{width-20}" y="{0.5*(height-6)}" points="{[new Point(0,0),new Point(12,0),new Point(6,6) ]}"
+						color="0x333333" />
+	</common:BaseContainer >
+	<common:BaseContainer y="{height + 10}" id="list" visible="false" />
+</containers:Canvas >

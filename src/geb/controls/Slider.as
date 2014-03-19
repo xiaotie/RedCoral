@@ -48,10 +48,13 @@ package geb.controls
 		public var thumb:Sprite;
 		[Bindable]
 		public var track:Sprite;
+		
 		[Bindable]
 		public var trackHighlight:Sprite;
 		
 		public var clickable:Boolean = true;
+		
+		public var hightlightPadding:Number = 0;
 		
 		[Bindable]
 		public var orientation:String = "horizontal";
@@ -213,6 +216,7 @@ package geb.controls
 				if(trackHighlight != null)
 				{
 					trackHighlight.width = pos + 0.5 * ts;
+					
 					trackHighlight.height = Math.min(height,trackHighlight.height);
 					trackHighlight.y = Math.max(0, 0.5 * (height - trackHighlight.height));
 					if(trackHighlight is BaseComponent)
@@ -225,6 +229,10 @@ package geb.controls
 				{
 					thumb.x = pos - (ignoreThumbSize ? thumb.width * 0.5 : 0);
 					thumb.y = 0.5 * (this.height - thumb.height);
+					if(thumb is BaseComponent)
+					{
+						BaseComponent(thumb).invalidateNow();
+					}
 				}
 			}
 			else
@@ -237,6 +245,10 @@ package geb.controls
 				{
 					thumb.x = 0.5 * (this.width - thumb.width);
 					thumb.y = pos - (ignoreThumbSize ? thumb.height * 0.5 : 0);
+					if(thumb is BaseComponent)
+					{
+						BaseComponent(thumb).invalidateNow();
+					}
 				}
 				
 				if(trackHighlight != null)

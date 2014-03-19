@@ -5,6 +5,8 @@
 package geb.utils
 {
 	import flash.text.Font;
+	
+	import geb.controls.ListItem;
 
 	public class FlashFont
 	{
@@ -19,10 +21,10 @@ package geb.utils
 			this.isBuildIn = buildIn;
 		}
 		
-		public static function GetSystemFonts(lang:String = "CN"):Vector.<FlashFont>
+		public static function GetSystemFonts(lang:String = "CN"):Vector.<ListItem>
 		{
 			var sysFonts:Array = Font.enumerateFonts(true); 
-			var list:Vector.<FlashFont> = new Vector.<FlashFont>();
+			var list:Vector.<ListItem> = new Vector.<ListItem>();
 			var cns:Vector.<FlashFont> = GetCNFonts();
 			for each(var item:FlashFont in cns)
 			{
@@ -41,8 +43,8 @@ package geb.utils
 				
 				if(needAdd == true)
 				{
-					var flashFont:FlashFont = new FlashFont(item.name,item.flashName,item.isBuildIn);
-					list.push(flashFont);
+					var listItem:ListItem = new ListItem(item.flashName, item.name);
+					list.push(listItem);
 				}
 			}
 			return list;

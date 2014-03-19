@@ -23,6 +23,16 @@
 				img.enabled = value;
 				if(value == true) alpha = 1;
 			}
+			
+			public override function get width():Number
+			{
+				return img.width;
+			}
+			
+			public override function get height():Number
+			{
+				return img.height;
+			}
 		]]>
 	</fx:Script>
 	<controls:Image id="img" source="{source}" mouseChildren="false" mouseEnabled="false" />

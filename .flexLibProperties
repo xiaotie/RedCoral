@@ -23,6 +23,9 @@
     <classEntry path="geb.controls.SwfButton"/>
     <classEntry path="geb.utils.Padding"/>
     <classEntry path="geb.utils.FlashFont"/>
+    <classEntry path="geb.controls.ComboList"/>
+    <classEntry path="geb.controls.classes.ComboListItemUI"/>
+    <classEntry path="geb.controls.ListItem"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
