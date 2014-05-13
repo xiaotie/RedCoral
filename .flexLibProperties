@@ -26,6 +26,9 @@
     <classEntry path="geb.controls.ComboList"/>
     <classEntry path="geb.controls.classes.ComboListItemUI"/>
     <classEntry path="geb.controls.ListItem"/>
+    <classEntry path="geb.common.ImageRequest"/>
+    <classEntry path="geb.shapes.Path"/>
+    <classEntry path="geb.shapes.AntLine"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

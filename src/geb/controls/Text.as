@@ -70,6 +70,10 @@ package geb.controls
 		private var _padding:Padding;
 		private var _multiline:Boolean = true;
 		private var _wordWrap:Boolean = true;
+		private var _textHeight:Number;
+		private var _textWidth:Number;
+		
+		private var _allowResizeTextField:Boolean;
 		
 		/**
 		 * Constructor
@@ -83,6 +87,38 @@ package geb.controls
 			this.text = text;
 			super(parent, xpos, ypos);
 			setSize(200, 100);
+		}
+
+		public function get allowResizeTextField():Boolean
+		{
+			return _allowResizeTextField;
+		}
+
+		public function set allowResizeTextField(value:Boolean):void
+		{
+			_allowResizeTextField = value;
+		}
+
+		[Bindable]
+		public function get textWidth():Number
+		{
+			return _textWidth;
+		}
+
+		protected function set textWidth(value:Number):void
+		{
+			_textWidth = value;
+		}
+
+		[Bindable]
+		public function get textHeight():Number
+		{
+			return _textHeight;
+		}
+
+		protected function set textHeight(value:Number):void
+		{
+			_textHeight = value;
 		}
 
 		public function get fontSize():Number
@@ -273,6 +309,8 @@ package geb.controls
 			//_tf.addEventListener(FocusEvent.FOCUS_IN, onFocusIn);
 			//_tf.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
 			addChild(_tf);
+			this.textWidth = _tf.textWidth;
+			this.textHeight = _tf.textHeight;
 			draw();
 		}
 		
@@ -344,7 +382,13 @@ package geb.controls
 			{
 				_tf.text = _text;
 			}
+			this.textWidth = _tf.textWidth;
+			this.textHeight = _tf.textHeight;
 			
+			if(_allowResizeTextField == true)
+			{
+				_tf.height = _tf.textWidth;
+			}
 		}
 		
 		///////////////////////////////////
