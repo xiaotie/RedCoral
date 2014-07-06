@@ -26,6 +26,8 @@ package geb.shapes
 			this.draw();
 		}
 		
+		public var thickness:Number = 1;
+		
 		private var timer:Timer;
 		
 		private var odd:Boolean = false;
@@ -54,7 +56,7 @@ package geb.shapes
 			
 			if(lines == null || lines.length == 0) return;
 			
-			g.lineStyle(1, this.color, 1,true);
+			g.lineStyle(thickness, this.color, 1,true);
 			
 			for(var i:int = 0; i< _lines.length; i++)
 			{
