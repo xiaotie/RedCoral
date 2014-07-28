@@ -26,6 +26,21 @@ package geb.shapes
 			this.draw();
 		}
 		
+		private var _alternativeColor:uint = 0x000000;
+		
+		public function get alternativeColor():uint
+		{
+			return _alternativeColor;
+		}
+		
+		public function set alternativeColor(value:uint):void
+		{
+			if(_alternativeColor ==value) return;
+			
+			_alternativeColor = value;
+			this.invalidate();
+		}
+		
 		public var thickness:Number = 1;
 		
 		private var timer:Timer;
@@ -56,8 +71,6 @@ package geb.shapes
 			
 			if(lines == null || lines.length == 0) return;
 			
-			g.lineStyle(thickness, this.color, 1,true);
-			
 			for(var i:int = 0; i< _lines.length; i++)
 			{
 				var line:Vector.<Point> = _lines[i];
@@ -65,6 +78,8 @@ package geb.shapes
 				{
 					if(odd == false)
 					{
+						g.lineStyle(thickness, this.color, 1,true);
+						
 						for(var k:int = 0; k < line.length; k++)
 						{
 							if(k%2 == 0)
@@ -76,12 +91,42 @@ package geb.shapes
 								g.lineTo(line[k].x,line[k].y);
 							}
 						}
-					}
-					else
-					{
+						
+						g.lineStyle(thickness, this.alternativeColor, 1,true);
+
 						for(k = 1; k < line.length; k++)
 						{
 							if(k%2 == 1)
+							{
+								g.moveTo(line[k].x,line[k].y);
+							}
+							else
+							{
+								g.lineTo(line[k].x,line[k].y);
+							}
+						}
+					}
+					else
+					{
+						g.lineStyle(thickness, this.color, 1,true);
+						
+						for(k = 1; k < line.length; k++)
+						{
+							if(k%2 == 1)
+							{
+								g.moveTo(line[k].x,line[k].y);
+							}
+							else
+							{
+								g.lineTo(line[k].x,line[k].y);
+							}
+						}
+						
+						g.lineStyle(thickness, this.alternativeColor, 1,true);
+						
+						for(var k:int = 0; k < line.length; k++)
+						{
+							if(k%2 == 0)
 							{
 								g.moveTo(line[k].x,line[k].y);
 							}
